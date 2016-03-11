@@ -1,0 +1,73 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<dom-module id="student-class">
+    <template>
+        <style include="shared-styles">
+            :host {
+            }
+
+            paper-card {
+                width: calc(98.66% - 16px);
+                --paper-card-header-color: white;
+                --paper-card-header: {
+                    background: var(--accent-color);
+                }
+            }
+        </style>
+        
+            <paper-card heading="Software Engineering">
+                <div class="card-actions">
+                    <paper-button>Share</paper-button>
+                    <paper-button>Explore</paper-button>
+                    <paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()" style="float:right;">
+                    </paper-icon-button>
+                    <iron-collapse id="more-info" style="width:100%;">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.
+                    </iron-collapse>
+                    <script>
+                        function _toggle() {
+                            var moreInfo = document.getElementById('more-info');
+                            var iconButton = Polymer.dom(event).localTarget;
+                            iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+                            : 'hardware:keyboard-arrow-down';
+                            moreInfo.toggle();
+                        }
+                    </script>
+                </div>
+            </paper-card>
+        
+    </template>
+
+    <script>
+        (function() {
+      'use strict';
+
+      Polymer({
+        is: 'student-class',
+
+        properties: {
+          greeting: {
+            type: String,
+            value: 'Welcome!',
+            notify: true
+          }
+        }
+      });
+    })();
+    </script>
+</dom-module>
