@@ -9,11 +9,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
-<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
 
 <dom-module id="student-class">
     <template>
@@ -23,19 +18,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             paper-card {
                 width: calc(98.66% - 16px);
-                --paper-card-header-color: white;
-                --paper-card-header: {
+                --paper-card-content: {
+					font-size: 26px;
+			        font-weight: 500;
+					color: white;
                     background: var(--accent-color);
                 }
             }
+
+			paper-icon-button {
+				vertical-align: bottom;
+			}
+
+			paper-input {
+				float: right;
+				display: inline-block;
+				width: 90px;
+			}
+
+			paper-button {
+				float: right;
+				display: inline-block;
+				color: var(--accent-color);
+  			}
+
         </style>
-        
-            <paper-card heading="Software Engineering">
+
+            <paper-card>
+				<!-- header -->
+                <div class="card-content">
+					<iron-icon icon="maps:local-library"></iron-icon>
+                	Software Engineering
+					<iron-icon icon="device:gps-fixed" style="float:right;"></iron-icon>
+					<iron-icon icon="device:access-time" style="float:right;"></iron-icon>
+					<iron-icon icon="editor:border-color" style="float:right;"></iron-icon>
+                </div>
+
+				<!-- middle -->
                 <div class="card-actions">
-                    <paper-button>Share</paper-button>
-                    <paper-button>Explore</paper-button>
-                    <paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()" style="float:right;">
+					<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()">
                     </paper-icon-button>
+					<paper-button ><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
+					<paper-input label="Enter code" no-label-float></paper-input>
                     <iron-collapse id="more-info" style="width:100%;">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.
                     </iron-collapse>
@@ -50,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </script>
                 </div>
             </paper-card>
-        
+
     </template>
 
     <script>
