@@ -11,87 +11,96 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="student-class">
-    <template>
-        <style include="shared-styles">
-            :host {
-            }
+	<template>
+	<style include="shared-styles">
+	:host {
+	}
 
-            paper-card {
-                width: calc(98.66% - 16px);
-                --paper-card-content: {
-					font-size: 26px;
-			        font-weight: 500;
-					color: white;
-                    background: var(--accent-color);
-                }
-            }
+	paper-card {
+		width: calc(98.66% - 16px);
+		--paper-card-content: {
+			font-size: 26px;
+			font-weight: 500;
+			color: white;
+			background: var(--accent-color);
+		}
+	}
 
-			paper-icon-button {
-				vertical-align: bottom;
+	paper-icon-button {
+		vertical-align: bottom;
+	}
+
+	paper-input {
+		float: right;
+		display: inline-block;
+		width: 90px;
+	}
+
+	paper-button {
+		float: right;
+		display: inline-block;
+		color: var(--accent-color);
+	}
+
+	</style>
+
+	<paper-card>
+		<!-- header -->
+		<div class="card-content">
+			<iron-icon icon="maps:local-library"></iron-icon>
+			{{className}}
+			<iron-icon icon="device:access-time" style="float:right;"></iron-icon>
+			<iron-icon icon="device:gps-fixed" hidden$="{{!locationReq}}" style="float:right;"></iron-icon>
+			<iron-icon icon="editor:border-color" hidden$="{{!codeReq}}" style="float:right;"></iron-icon>
+		</div>
+
+		<!-- middle -->
+		<div class="card-actions">
+			<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()">
+			</paper-icon-button>
+			<paper-button ><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
+			<paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
+			<iron-collapse id="more-info" style="width:100%;">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.
+			</iron-collapse>
+			<script>
+			function _toggle() {
+				var moreInfo = document.getElementById('more-info');
+				var iconButton = Polymer.dom(event).localTarget;
+				iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+				: 'hardware:keyboard-arrow-down';
+				moreInfo.toggle();
 			}
+			</script>
+		</div>
+	</paper-card>
 
-			paper-input {
-				float: right;
-				display: inline-block;
-				width: 90px;
-			}
+</template>
 
-			paper-button {
-				float: right;
-				display: inline-block;
-				color: var(--accent-color);
-  			}
+<script>
 
-        </style>
+Polymer({
+	is: 'student-class',
 
-            <paper-card>
-				<!-- header -->
-                <div class="card-content">
-					<iron-icon icon="maps:local-library"></iron-icon>
-                	Software Engineering
-					<iron-icon icon="device:gps-fixed" style="float:right;"></iron-icon>
-					<iron-icon icon="device:access-time" style="float:right;"></iron-icon>
-					<iron-icon icon="editor:border-color" style="float:right;"></iron-icon>
-                </div>
+	properties: {
 
-				<!-- middle -->
-                <div class="card-actions">
-					<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()">
-                    </paper-icon-button>
-					<paper-button ><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
-					<paper-input label="Enter code" no-label-float></paper-input>
-                    <iron-collapse id="more-info" style="width:100%;">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.
-                    </iron-collapse>
-                    <script>
-                        function _toggle() {
-                            var moreInfo = document.getElementById('more-info');
-                            var iconButton = Polymer.dom(event).localTarget;
-                            iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
-                            : 'hardware:keyboard-arrow-down';
-                            moreInfo.toggle();
-                        }
-                    </script>
-                </div>
-            </paper-card>
+		className: {
+			type: String,
+			value: 'noClassNameGiven',
+			notify: true
+		},
 
-    </template>
+		locationReq: {
+			type: Boolean,
+			value: false
+		},
 
-    <script>
-        (function() {
-      'use strict';
+		codeReq: {
+			type: Boolean,
+			value: false,
+		}
 
-      Polymer({
-        is: 'student-class',
-
-        properties: {
-          greeting: {
-            type: String,
-            value: 'Welcome!',
-            notify: true
-          }
-        }
-      });
-    })();
-    </script>
+	}
+});
+</script>
 </dom-module>
