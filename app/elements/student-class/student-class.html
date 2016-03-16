@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<template>
 	<style include="shared-styles">
 	:host {
+		--my-color: var(--accent-color);
 	}
 
 	paper-card {
@@ -22,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			font-size: 26px;
 			font-weight: 500;
 			color: white;
-			background: var(--accent-color);
+			background: var(--my-color);
 		}
 	}
 
@@ -39,7 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	paper-button {
 		float: right;
 		display: inline-block;
-		color: var(--accent-color);
+		color: var(--my-color);
 	}
 
 	</style>
@@ -58,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<div class="card-actions">
 			<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()">
 			</paper-icon-button>
-			<paper-button ><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
+			<paper-button><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
 			<paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
 			<iron-collapse id="more-info" style="width:100%;">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.
@@ -84,6 +85,12 @@ Polymer({
 
 	properties: {
 
+		elementColor: {
+			type: String,
+			value: 'var(--accent-color)',
+			notify: true
+		},
+
 		className: {
 			type: String,
 			value: 'noClassNameGiven',
@@ -100,7 +107,12 @@ Polymer({
 			value: false,
 		}
 
-	}
+	},
+
+	ready: function() {
+        this.customStyle['--my-color'] = this.elementColor;
+        this.updateStyles();
+      }
 });
 </script>
 </dom-module>
