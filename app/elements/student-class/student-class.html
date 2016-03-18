@@ -11,108 +11,190 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="student-class">
-	<template>
-	<style include="shared-styles">
-	:host {
-		--my-color: var(--accent-color);
-	}
+    <template>
+        <style include="shared-styles">
+            :host {
+                --my-color: var(--accent-color);
+                --present-color: var(--paper-green-a700);
+                --late-color: var(--paper-amber-500);
+                --absent-color: var(--paper-red-700);
+            }
 
-	paper-card {
-		width: calc(98.66% - 16px);
-		--paper-card-content: {
-			font-size: 26px;
-			font-weight: 500;
-			color: white;
-			background: var(--my-color);
-		}
-	}
+            paper-card {
+                width: calc(98.66% - 16px);
+                --paper-card-content: {
+                    font-size: 26px;
+                    font-weight: 500;
+                    color: white;
+                    background: var(--my-color);
+                }
+            }
 
-	paper-icon-button {
-		vertical-align: bottom;
-	}
+            paper-icon-button {
+                vertical-align: bottom;
+            }
 
-	paper-input {
-		float: right;
-		display: inline-block;
-		width: 90px;
-	}
+            paper-input {
+                float: right;
+                display: inline-block;
+                width: 90px;
+            }
 
-	paper-button {
-		float: right;
-		display: inline-block;
-		color: var(--my-color);
-	}
+            paper-button {
+                float: right;
+                display: inline-block;
+                color: var(--my-color);
+            }
 
-	</style>
+            paper-progress {
+                width: 100%;
+                display: inline-block;
+                vertical-align: top;
+            }
 
-	<paper-card>
-		<!-- header -->
-		<div class="card-content">
-			<iron-icon icon="maps:local-library"></iron-icon>
-			{{className}}
-			<iron-icon icon="device:access-time" style="float:right;"></iron-icon>
-			<iron-icon icon="device:gps-fixed" hidden$="{{!locationReq}}" style="float:right;"></iron-icon>
-			<iron-icon icon="editor:border-color" hidden$="{{!codeReq}}" style="float:right;"></iron-icon>
-		</div>
+            #present {
+                --paper-progress-active-color: var(--present-color);
+            }
 
-		<!-- middle -->
-		<div class="card-actions">
-			<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()">
-			</paper-icon-button>
-			<paper-button><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
-			<paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
-			<iron-collapse id="more-info" style="width:100%;">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.
-			</iron-collapse>
-			<script>
-			function _toggle() {
-				var moreInfo = document.getElementById('more-info');
-				var iconButton = Polymer.dom(event).localTarget;
-				iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
-				: 'hardware:keyboard-arrow-down';
-				moreInfo.toggle();
-			}
-			</script>
-		</div>
-	</paper-card>
+            #presentText {
+                width: 100%;
+                display: inline-block;
+                vertical-align: bottom;
+                @apply(--paper-font-caption);
+                color: var(--present-color);
+            }
 
-</template>
+            #late {
+                --paper-progress-active-color: var(--late-color);
+            }
 
-<script>
+            #lateText {
+                width: 100%;
+                display: inline-block;
+                vertical-align: bottom;
+                @apply(--paper-font-caption);
+                color: var(--late-color);
+            }
 
-Polymer({
-	is: 'student-class',
+            #absent {
+                --paper-progress-active-color: var(--absent-color);
+            }
 
-	properties: {
+            #absentText {
+                width: 100%;
+                display: inline-block;
+                vertical-align: bottom;
+                @apply(--paper-font-caption);
+                color: var(--absent-color);
+            }
 
-		elementColor: {
-			type: String,
-			value: 'var(--accent-color)',
-			notify: true
-		},
+        </style>
 
-		className: {
-			type: String,
-			value: 'noClassNameGiven',
-			notify: true
-		},
+        <paper-card>
+            <!-- header -->
+            <div class="card-content">
+                <iron-icon icon="maps:local-library"></iron-icon>
+                {{className}}
+                <iron-icon icon="device:access-time" style="float:right;"></iron-icon>
+                <iron-icon icon="device:gps-fixed" hidden$="{{!locationReq}}" style="float:right;"></iron-icon>
+                <iron-icon icon="editor:border-color" hidden$="{{!codeReq}}" style="float:right;"></iron-icon>
+            </div>
 
-		locationReq: {
-			type: Boolean,
-			value: false
-		},
+            <!-- middle -->
+            <div class="card-actions">
+                <paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()">
+                </paper-icon-button>
+                <script>
+                    function _toggle() {
+                        var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
+                        var iconButton = Polymer.dom(event).localTarget;
+                        iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+                        : 'hardware:keyboard-arrow-down';
+                        moreInfo.toggle();
+                    }
+                </script>
 
-		codeReq: {
-			type: Boolean,
-			value: false,
-		}
+                <paper-button><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
+                <paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
 
-	},
+                <iron-collapse id="dropdown" style="width:100%;">
+                    <span id="presentText">
+                        Present <span style="float:right;">90%</span>
+                        <br>
+                    </span>
+                    <paper-progress id="present" value="90"></paper-progress>
+                    <br>
+                    <span id="lateText">
+                        Late <span style="float:right;">20%</span>
+                        <br>
+                    </span>
+                    <paper-progress id="late" value="20"></paper-progress>
+                    <br>
+                    <span id="absentText">
+                        Absent <span style="float:right;">10%</span>
+                        <br>
+                    </span>
+                    <paper-progress id="absent" value="10"></paper-progress>
+                    <br>
+                </iron-collapse>
+            </div>
+        </paper-card>
 
-	ready: function() {
-        this.customStyle['--my-color'] = this.elementColor;
-        this.updateStyles();
-      }
-});
-</script>
+    </template>
+
+    <script>
+
+        Polymer({
+            is: 'student-class',
+
+            properties: {
+
+                elementColor: {
+                    type: String,
+                    value: 'var(--accent-color)',
+                },
+
+                className: {
+                    type: String,
+                    value: 'noClassNameGiven',
+                },
+
+                locationReq: {
+                    type: Boolean,
+                    value: false
+                },
+
+                codeReq: {
+                    type: Boolean,
+                    value: false,
+                },
+                
+                numTotal: {
+                    type: Number,
+                    value: 1,
+                },
+                
+                numPresent: {
+                    type: Number,
+                    value: 1,
+                },
+                
+                numLate: {
+                    type: Number,
+                    value: 1,
+                },
+                
+                numAbsent: {
+                    type: Number,
+                    value: 1,
+                }
+
+            },
+
+            ready: function() {
+                this.customStyle['--my-color'] = this.elementColor;
+                this.updateStyles();
+            }
+        });
+    </script>
 </dom-module>
