@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             paper-card {
-                width: calc(98.66% - 16px);
+                width: 100%;
                 --paper-card-content: {
                     font-size: 26px;
                     font-weight: 500;
@@ -35,15 +35,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             paper-input {
-                float: right;
+				--paper-input-container-focus-color: var(--my-color);
                 display: inline-block;
                 width: 90px;
             }
 
             paper-button {
-                float: right;
                 display: inline-block;
                 color: var(--my-color);
+            }
+
+			paper-fab {
+                float: right;
+                display: inline-block;
+                --paper-fab-background: var(--my-color);
             }
 
             paper-progress {
@@ -102,8 +107,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <!-- middle -->
             <div class="card-actions">
-                <paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()">
-                </paper-icon-button>
+
+	                <paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
+					<paper-button><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
+
+				<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()"
+				style="float: right;"></paper-icon-button>
                 <script>
                     function _toggle() {
                         var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
@@ -113,9 +122,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         moreInfo.toggle();
                     }
                 </script>
-
-                <paper-button><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
-                <paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
 
                 <iron-collapse id="dropdown" style="width:100%;">
                     <span id="presentText">
@@ -136,6 +142,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </span>
                     <paper-progress id="absent" value="10"></paper-progress>
                     <br>
+					<paper-fab mini icon="close"></paper-fab>
+					<br><br>
                 </iron-collapse>
             </div>
         </paper-card>
@@ -168,22 +176,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: Boolean,
                     value: false,
                 },
-                
+
                 numTotal: {
                     type: Number,
                     value: 1,
                 },
-                
+
                 numPresent: {
                     type: Number,
                     value: 1,
                 },
-                
+
                 numLate: {
                     type: Number,
                     value: 1,
                 },
-                
+
                 numAbsent: {
                     type: Number,
                     value: 1,

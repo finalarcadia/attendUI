@@ -69,10 +69,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 				<!-- Drawer Toolbar -->
 				<paper-toolbar id="drawerToolbar">
-					<span class="menu-name">
-						<iron-icon icon="icons:account-circle"></iron-icon>
-						&nbsp;&nbsp;
-						username@email.edu
+					<span class="menu-name" style="width: 100%;">
+						<!--- Begin user account panel --->
+						<span style="display: inline-block; width: 80%;">
+							<iron-icon icon="account-circle"></iron-icon>
+							username@school.edu
+						</span>
+						<span style="display: inline-block;">
+							<paper-icon-button icon="highlight-off" title="Logout"></paper-icon-button>
+						</span>
+						<!--- End user account panel --->
 					</span>
 				</paper-toolbar>
 
@@ -109,27 +115,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<span class="space"></span>
 
 					<!-- Toolbar icons -->
-					<paper-icon-button icon="refresh"></paper-icon-button>
-					<paper-icon-button icon="search"></paper-icon-button>
+					<paper-input label="Add class" no-label-float></paper-input>
+					<paper-icon-button icon="add"></paper-icon-button>
 
 					<!-- Application name -->
 					<div class="middle middle-container">
-						<div class="app-name">My Classes</div>
+						<div class="app-name" style="--iron-icon-width: 60px; --iron-icon-height: 60px; --iron-icon-fill-color: black;">
+							<iron-icon icon="assignment"></iron-icon>
+							attend.io
+						</div>
 					</div>
 
 					<!-- Application sub title -->
+					<!--
 					<div class="bottom bottom-container">
 						<div class="bottom-title">Sub-title</div>
 					</div>
+					-->
 				</paper-toolbar>
 
 				<!-- Main Content -->
 				<div class="content">
 					<iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-						<!-- Begin Home-->
+						<!-- Begin Student Home-->
 
 						<section data-route="home">
+
+							<h2 class="page-title">My Classes</h2>
 
 							<!-- Class Card-->
 							<student-class class-name="Operating Systems" location-req code-req></student-class>
@@ -140,23 +153,81 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							<!-- End Class Card-->
 							<br><br>
 							<!-- Class Card-->
-							<student-class element-color="var(--paper-amber-500)" class-name="Net-Centric Computing"></student-class>
+							<student-class element-color="var(--paper-amber-500)" class-name="Net-Centric Computing" ></student-class>
 							<!-- End Class Card-->
+							<br><br>
 
 
 						</section>
 
-						<!-- End Home-->
+						<!-- End Student Home-->
 
 						<section data-route="users">
-							<paper-material elevation="1">
-								<h2 class="page-title">Users</h2>
-								<p>This is the users section</p>
-								<a href$="{{baseUrl}}users/Addy">Addy</a><br>
-								<a href$="{{baseUrl}}users/Rob">Rob</a><br>
-								<a href$="{{baseUrl}}users/Chuck">Chuck</a><br>
-								<a href$="{{baseUrl}}users/Sam">Sam</a>
-							</paper-material>
+
+							<!-- Begin Professor Home-->
+							<h2 class="page-title">My Classes</h2>
+
+							<!-- Professor class Card-->
+							<professor-class element-color="var(--paper-blue-500)" class-name="COP 4660" location-req code-req></professor-class>
+							<!-- End Professor class Card-->
+							<br><br>
+							<!-- Professor class Card-->
+							<professor-class class-name="NET 1234" location-req></professor-class>
+							<!-- End Professor class Card-->
+
+							<h2 class="page-title">Requests</h2>
+
+							<paper-card>
+								<!-- header -->
+								<div class="card-content" style="width: 100%;">
+									<span style="display: inline-block; width: 84%;">
+										<iron-icon icon="maps:local-library"></iron-icon>
+										COP 4660
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<iron-icon icon="account-circle"></iron-icon>
+										Gabriel Fernandez
+									</span>
+									<span style="display: inline-block;">
+										<paper-icon-button icon="check" title="accept"></paper-icon-button>
+										<paper-icon-button icon="clear" title="accept"></paper-icon-button>
+									</span>
+								</div>
+							</paper-card>
+							<paper-card>
+								<!-- header -->
+								<div class="card-content" style="width: 100%;">
+									<span style="display: inline-block; width: 84%;">
+										<iron-icon icon="maps:local-library"></iron-icon>
+										COP 4660
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<iron-icon icon="account-circle"></iron-icon>
+										Jonathan Jensen
+									</span>
+									<span style="display: inline-block;">
+										<paper-icon-button icon="check" title="accept"></paper-icon-button>
+										<paper-icon-button icon="clear" title="accept"></paper-icon-button>
+									</span>
+								</div>
+							</paper-card>
+							<paper-card>
+								<!-- header -->
+								<div class="card-content" style="width: 100%;">
+									<span style="display: inline-block; width: 84%;">
+										<iron-icon icon="maps:local-library"></iron-icon>
+										NET 1423
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<iron-icon icon="assignment-ind"></iron-icon>
+										Massoud Milani
+									</span>
+									<span style="display: inline-block;">
+										<paper-icon-button icon="check" title="accept"></paper-icon-button>
+										<paper-icon-button icon="clear" title="accept"></paper-icon-button>
+									</span>
+								</div>
+							</paper-card>
+
+							<!-- End Professor Home-->
+
 						</section>
 
 						<section data-route="user-info">

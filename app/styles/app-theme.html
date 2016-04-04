@@ -50,6 +50,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     /* General styles */
 
+	paper-input {
+		width: 90px;
+		--paper-input-container-color: white;
+		--paper-input-container-focus-color: white;
+	}
+
     body {
         @apply(--layout-fullbleed);
         @apply(--layout-vertical);
@@ -115,6 +121,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         /* Required for main area's paper-scroll-header-panel custom condensing transformation */
         -webkit-transform-origin: left center;
         transform-origin: left center;
+		--paper-input-container-color: white;
+		--paper-input-container-focus-color: white;
     }
 
     #mainToolbar .middle-container,
@@ -164,13 +172,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background: white;
     }
 
+	/*************My edits*************/
+
     paper-card {
-        width: calc(98.66% - 16px);
-        --paper-card-header-color: white;
-        --paper-card-header: {
-            background: var(--accent-color);
-        }
+        width: 100%;
     }
+
+	/*************My edits*************/
 
     #toast .toast-hide-button {
         color: #eeff41;
