@@ -129,149 +129,125 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<!-- Application sub title -->
 					<!--
 					<div class="bottom bottom-container">
-						<div class="bottom-title">Sub-title</div>
-					</div>
-					-->
-				</paper-toolbar>
-
-				<!-- Main Content -->
-				<div class="content">
-					<iron-pages attr-for-selected="data-route" selected="{{route}}">
-
-						<!-- Begin Student Home-->
-
-						<section data-route="home">
-
-							<h2 class="page-title">My Classes</h2>
-
-							<!-- Class Card-->
-							<student-class class-name="Operating Systems" location-req code-req></student-class>
-							<!-- End Class Card-->
-							<br><br>
-							<!-- Class Card-->
-							<student-class element-color="var(--paper-teal-500)" class-name="Software Engineering" location-req></student-class>
-							<!-- End Class Card-->
-							<br><br>
-							<!-- Class Card-->
-							<student-class element-color="var(--paper-amber-500)" class-name="Net-Centric Computing" ></student-class>
-							<!-- End Class Card-->
-							<br><br>
-
-
-						</section>
-
-						<!-- End Student Home-->
-
-						<section data-route="users">
-
-							<!-- Begin Professor Home-->
-							<h2 class="page-title">My Classes</h2>
-
-							<!-- Professor class Card-->
-							<professor-class element-color="var(--paper-blue-500)" class-name="COP 4660" location-req code-req></professor-class>
-							<!-- End Professor class Card-->
-							<br><br>
-							<!-- Professor class Card-->
-							<professor-class class-name="NET 1234" location-req></professor-class>
-							<!-- End Professor class Card-->
-
-							<h2 class="page-title">Requests</h2>
-
-							<paper-card>
-								<!-- header -->
-								<div class="card-content" style="width: 100%;">
-									<span style="display: inline-block; width: 84%;">
-										<iron-icon icon="maps:local-library"></iron-icon>
-										COP 4660
-										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<iron-icon icon="account-circle"></iron-icon>
-										Gabriel Fernandez
-									</span>
-									<span style="display: inline-block;">
-										<paper-icon-button icon="check" title="accept"></paper-icon-button>
-										<paper-icon-button icon="clear" title="accept"></paper-icon-button>
-									</span>
-								</div>
-							</paper-card>
-							<paper-card>
-								<!-- header -->
-								<div class="card-content" style="width: 100%;">
-									<span style="display: inline-block; width: 84%;">
-										<iron-icon icon="maps:local-library"></iron-icon>
-										COP 4660
-										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<iron-icon icon="account-circle"></iron-icon>
-										Jonathan Jensen
-									</span>
-									<span style="display: inline-block;">
-										<paper-icon-button icon="check" title="accept"></paper-icon-button>
-										<paper-icon-button icon="clear" title="accept"></paper-icon-button>
-									</span>
-								</div>
-							</paper-card>
-							<paper-card>
-								<!-- header -->
-								<div class="card-content" style="width: 100%;">
-									<span style="display: inline-block; width: 84%;">
-										<iron-icon icon="maps:local-library"></iron-icon>
-										NET 1423
-										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<iron-icon icon="assignment-ind"></iron-icon>
-										Massoud Milani
-									</span>
-									<span style="display: inline-block;">
-										<paper-icon-button icon="check" title="accept"></paper-icon-button>
-										<paper-icon-button icon="clear" title="accept"></paper-icon-button>
-									</span>
-								</div>
-							</paper-card>
-
-							<!-- End Professor Home-->
-
-						</section>
-
-						<section data-route="user-info">
-							<paper-material elevation="1">
-								<h2 class="page-title">User: {{params.name}}</h2>
-								<div>This is {{params.name}}'s section</div>
-							</paper-material>
-						</section>
-
-						<section data-route="contact">
-							<paper-material elevation="1">
-								<h2 class="page-title">Contact</h2>
-								<p>This is the contact section</p>
-							</paper-material>
-						</section>
-
-						<section data-route="books">
-							<paper-material elevation="1">
-								<p>Hello, World!</p>
-							</paper-material>
-						</section>
-					</iron-pages>
+					<div class="bottom-title">Sub-title</div>
 				</div>
-			</paper-scroll-header-panel>
-		</paper-drawer-panel>
+			-->
+		</paper-toolbar>
 
-		<paper-toast id="toast">
-			<span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
-		</paper-toast>
+		<!-- Main Content -->
+		<div class="content">
+			<iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-		<!-- Uncomment next block to enable Service Worker support (1/2) -->
-		<!--
-		<paper-toast id="caching-complete"
-		duration="6000"
-		text="Caching complete! This app will work offline.">
-	</paper-toast>
+				<!-- Begin Student Home-->
 
-	<platinum-sw-register auto-register
-	clients-claim
-	skip-waiting
-	base-uri="bower_components/platinum-sw/bootstrap"
-	on-service-worker-installed="displayInstalledToast">
-	<platinum-sw-cache default-cache-strategy="fastest"
-	cache-config-file="cache-config.json">
+				<section data-route="home">
+
+					<h2 class="page-title">My Classes</h2>
+
+					<!-- Class Card-->
+					<student-class class-name="Operating Systems" location-req code-req></student-class>
+					<!-- End Class Card-->
+					<br><br>
+					<!-- Class Card-->
+					<student-class element-color="var(--paper-teal-500)" class-name="Software Engineering" location-req></student-class>
+					<!-- End Class Card-->
+					<br><br>
+					<!-- Class Card-->
+					<student-class element-color="var(--paper-amber-500)" class-name="Net-Centric Computing" ></student-class>
+					<!-- End Class Card-->
+					<br><br>
+
+
+				</section>
+
+				<!-- End Student Home-->
+
+				<section data-route="users">
+
+					<!-- Begin Professor Home-->
+					<h2 class="page-title">Requests</h2>
+
+					<!-- Request Card-->
+					<request-card class-name="COP 4660 U01" person-name="Gabriel Fernandez" is-Student></request-card>
+					<!-- End Request Card-->
+					<!-- Request Card-->
+					<request-card class-name="COP 4660 U01" person-name="Jonathan Jensen" is-Student></request-card>
+					<!-- End Request Card-->
+
+					<h2 class="page-title">My Classes</h2>
+
+					<!-- Professor class Card-->
+					<professor-class element-color="var(--paper-blue-500)" class-name="COP 4660 U01" location-req code-req></professor-class>
+					<!-- End Professor class Card-->
+					<br><br>
+					<!-- Professor class Card-->
+					<professor-class class-name="NET 1234 U02" location-req></professor-class>
+					<!-- End Professor class Card-->
+
+					<!-- End Professor Home-->
+
+				</section>
+
+				<section data-route="contact">
+					<paper-material elevation="1">
+						<h2 class="page-title">Contact</h2>
+						<p>This is the contact section</p>
+					</paper-material>
+				</section>
+
+				<section data-route="books">
+
+					<!-- Begin Admin Home-->
+
+					<h2 class="page-title">Requests</h2>
+
+					<!-- Request Card-->
+					<request-card class-name="COP 3245 U03" person-name="Massoud Milani" is-Professor></request-card>
+					<!-- End Request Card-->
+					<!-- Request Card-->
+					<request-card class-name="COP 4660 U01" person-name="Gabriel Fernandez" is-Student></request-card>
+					<!-- End Request Card-->
+					<!-- Request Card-->
+					<request-card class-name="COP 4660 U01" person-name="Jonathan Jensen" is-Student></request-card>
+					<!-- End Request Card-->
+
+					<h2 class="page-title">Classes</h2>
+
+					<!-- Admin class Cards-->
+					<admin-class element-color="var(--paper-green-500)" class-name="COP 2431 U05"></admin-class>
+					<br><br>
+					<admin-class class-name="COP 4660 U01"></admin-class>
+					<br><br>
+					<admin-class element-color="var(--paper-amber-500)" class-name="COP 3245 U03"></admin-class>
+					<br><br>
+					<!-- End Admin class Cards-->
+
+					<!--End Admin Home--->
+
+				</section>
+			</iron-pages>
+		</div>
+	</paper-scroll-header-panel>
+</paper-drawer-panel>
+
+<paper-toast id="toast">
+	<span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
+</paper-toast>
+
+<!-- Uncomment next block to enable Service Worker support (1/2) -->
+<!--
+<paper-toast id="caching-complete"
+duration="6000"
+text="Caching complete! This app will work offline.">
+</paper-toast>
+
+<platinum-sw-register auto-register
+clients-claim
+skip-waiting
+base-uri="bower_components/platinum-sw/bootstrap"
+on-service-worker-installed="displayInstalledToast">
+<platinum-sw-cache default-cache-strategy="fastest"
+cache-config-file="cache-config.json">
 </platinum-sw-cache>
 </platinum-sw-register>
 -->
