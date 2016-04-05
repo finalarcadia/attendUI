@@ -1,0 +1,99 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="intro-card">
+	<template>
+	<style include="shared-styles">
+	:host {
+		--my-color: var(--accent-color);
+	}
+
+	paper-material {
+		width: 100%;
+		margin-bottom: 32px;
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+
+	paper-input {
+		--paper-input-container-focus-color: var(--my-color);
+		display: inline-block;
+		width: 75px;
+	}
+
+	paper-button {
+		display: inline-block;
+		color: var(--my-color);
+	}
+
+	paper-icon-button {
+		display: inline-block;
+		color: var(--my-color);
+	}
+
+	paper-radio-button {
+		width: 3px;
+		height: 3px;
+		--paper-radio-button-checked-color: var(--my-color);
+		--paper-radio-button-checked-ink-color: var(--my-color);
+	}
+
+	#large {
+		width: 183px;
+	}
+	</style>
+
+	<iron-icon icon="perm-identity"></iron-icon>
+	<paper-input label="Username" no-label-float></paper-input>
+	<iron-icon icon="lock-outline"></iron-icon>
+	<paper-input label="Password" no-label-float></paper-input>
+	<paper-button>Login</paper-button>
+	<br>
+	<iron-icon icon="face"></iron-icon>
+	<paper-input id="large" label="Full name" no-label-float></paper-input>
+	<br>
+	<iron-icon icon="social:school"></iron-icon>
+	<paper-input id="large" label="University" no-label-float></paper-input>
+	<br>
+	<iron-icon icon="folder-shared"></iron-icon>
+	<paper-input label="Id" no-label-float></paper-input>
+	<iron-icon icon="sort"></iron-icon>
+	<paper-radio-group selected="small">
+  		<paper-radio-button name="admin"></paper-radio-button>
+  		<paper-radio-button name="professor"></paper-radio-button>
+  		<paper-radio-button name="student"></paper-radio-button>
+	</paper-radio-group>
+	<paper-button>Register</paper-button>
+
+</template>
+
+<script>
+
+Polymer({
+	is: 'intro-card',
+
+	properties: {
+
+		elementColor: {
+			type: String,
+			value: 'var(--accent-color)',
+		}
+
+	},
+
+	ready: function() {
+		this.customStyle['--my-color'] = this.elementColor;
+		this.updateStyles();
+	}
+});
+</script>
+</dom-module>

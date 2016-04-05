@@ -1,0 +1,251 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="attendance-card">
+	<template>
+	<style include="shared-styles">
+	:host {
+		--my-color: var(--accent-color);
+		--present-color: var(--paper-green-a700);
+		--late-color: var(--paper-amber-500);
+		--absent-color: var(--paper-red-700);
+		--error-color: var(--paper-grey-500);
+		--no-color: var(--paper-grey-200);
+	}
+
+	paper-card {
+		width: 100%;
+		--paper-card-content: {
+			font-size: 26px;
+			font-weight: 500;
+			color: white;
+			background: var(--my-color);
+		}
+	}
+
+	paper-dropdown-menu {
+		width: 180px;
+	}
+
+	paper-button {
+		display: inline-block;
+		color: var(--my-color);
+	}
+
+	paper-fab {
+		display: inline-block;
+		margin-top: 2px;
+		float: right;
+		--paper-fab-background: var(--my-color);
+	}
+
+	#stats {
+		display: inline-block;
+		float: right;
+		margin-top: 38px;
+	}
+
+	#calendar {
+		display: inline-block;
+		width: 75%;
+		margin-left: 15%;
+	}
+
+	#month {
+		@apply(--paper-font-display2);
+		color: var(--my-color);
+	}
+
+	#present {
+		color: var(--present-color);
+	}
+
+	#late {
+		color: var(--late-color);
+	}
+
+	#absent {
+		color: var(--absent-color);
+	}
+
+	#error {
+		color: var(--error-color);
+	}
+
+	#no {
+		color: var(--no-color);
+	}
+	</style>
+
+	<paper-card>
+		<!-- header -->
+		<div class="card-content">
+			<iron-icon icon="maps:local-library"></iron-icon>
+			{{className}}
+		</div>
+
+		<!-- middle -->
+		<div class="card-actions">
+
+			<paper-dropdown-menu label="Select student">
+				<paper-listbox class="dropdown-content">
+					<paper-item><student-card element-color="{{elementColor}}"
+						person-name="Gabriel Fernandez"></user-card></paper-item>
+						<paper-item><student-card element-color="{{elementColor}}"
+							person-name="Jonathan Jensen"></user-card></paper-item>
+						</paper-listbox>
+					</paper-dropdown-menu>
+
+					<div id="stats">
+						<span id="present">32/40 </span>
+						<span id="late">10/40 </span>
+						<span id="absent">6/40 </span>
+						<span id="error">2/40 </span>
+					</div>
+
+					<br>
+
+					<div id="calendar">
+						<br><br>
+						<span id="month">May 2016
+							<iron-icon icon="unfold-more"></iron-icon>
+						</span>
+						<br><br>
+						<calendar-fab element-color="{{present}}" number="1"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{late}}" number="2"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{late}}" number="3"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{absent}}" number="4"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="5"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="6"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="7"></calendar-fab>
+						&nbsp;
+
+						<br><br>
+
+						<calendar-fab element-color="{{present}}" number="8"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="9"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="10"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="11"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="12"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="13"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="14"></calendar-fab>
+						&nbsp;
+
+
+						<br><br>
+
+						<calendar-fab element-color="{{present}}" number="15"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="16"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{late}}" number="17"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="18"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="19"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="20"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="21"></calendar-fab>
+						&nbsp;
+
+						<br><br>
+
+						<calendar-fab element-color="{{present}}" number="22"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="23"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{error}}" number="24"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="25"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="26"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{late}}" number="27"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{absent}}" number="28"></calendar-fab>
+						&nbsp;
+
+						<br><br>
+
+						<calendar-fab element-color="{{present}}" number="29"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{late}}" number="30"></calendar-fab>
+						&nbsp;
+						<calendar-fab element-color="{{present}}" number="31"></calendar-fab>
+						&nbsp;
+
+						<br><br>
+					</div>
+				</div>
+			</paper-card>
+
+		</template>
+
+		<script>
+
+		Polymer({
+			is: 'attendance-card',
+
+			properties: {
+
+				elementColor: {
+					type: String,
+					value: 'var(--accent-color)',
+				},
+
+				className: {
+					type: String,
+					value: 'noClassNameGiven',
+				},
+
+				present: {
+					type: String,
+					value: 'var(--paper-green-a700)',
+				},
+
+				late: {
+					type: String,
+					value: 'var(--paper-amber-500)',
+				},
+
+				absent: {
+					type: String,
+					value: 'var(--paper-red-700)',
+				},
+
+				error: {
+					type: String,
+					value: 'var(--paper-grey-500)',
+				}
+
+			},
+
+			ready: function() {
+				this.customStyle['--my-color'] = this.elementColor;
+				this.updateStyles();
+			}
+		});
+		</script>
+	</dom-module>

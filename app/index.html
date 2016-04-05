@@ -90,18 +90,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					</a>
 
 					<a data-route="users" href="{{baseUrl}}users">
-						<iron-icon icon="info"></iron-icon>
-						<span>Users</span>
+						<iron-icon icon="home"></iron-icon>
+						<span>Home</span>
 					</a>
 
 					<a data-route="contact" href="{{baseUrl}}contact">
-						<iron-icon icon="mail"></iron-icon>
-						<span>Contact</span>
+						<iron-icon icon="date-range"></iron-icon>
+						<span>Attendance</span>
 					</a>
 
 					<a data-route="books" href="{{baseUrl}}books">
-						<iron-icon icon="book"></iron-icon>
-						<span>Books</span>
+						<iron-icon icon="home"></iron-icon>
+						<span>Home</span>
 					</a>
 				</paper-menu>
 			</paper-scroll-header-panel>
@@ -142,7 +142,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 				<section data-route="home">
 
-					<h2 class="page-title">My Classes</h2>
+					<span id="myHeader">My Classes</span>
+					<br><br>
 
 					<!-- Class Card-->
 					<student-class class-name="Operating Systems" location-req code-req></student-class>
@@ -165,7 +166,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<section data-route="users">
 
 					<!-- Begin Professor Home-->
-					<h2 class="page-title">Requests</h2>
+					<span id="myHeader">Requests</span>
+					<br><br>
 
 					<!-- Request Card-->
 					<request-card class-name="COP 4660 U01" person-name="Gabriel Fernandez" is-Student></request-card>
@@ -174,7 +176,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<request-card class-name="COP 4660 U01" person-name="Jonathan Jensen" is-Student></request-card>
 					<!-- End Request Card-->
 
-					<h2 class="page-title">My Classes</h2>
+					<br><br>
+					<span id="myHeader">My Classes</span>
+					<br><br>
 
 					<!-- Professor class Card-->
 					<professor-class element-color="var(--paper-blue-500)" class-name="COP 4660 U01" location-req code-req></professor-class>
@@ -189,17 +193,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				</section>
 
 				<section data-route="contact">
-					<paper-material elevation="1">
-						<h2 class="page-title">Contact</h2>
-						<p>This is the contact section</p>
-					</paper-material>
+
+					<!----------------------
+					------------------------
+					-------->
+					<intro-card></intro-card>
+					<!----------------------
+					------------------------
+					-------->
+
+					<!-- Begin Attendance edit-->
+
+					<!-- Begin Attendance Cards-->
+					<attendance-card element-color="var(--paper-orange-500)" class-name="COP 2431 U05"></attendance-card>
+					<br><br>
+					<!-- End Attendance Cards-->
+					<!-- End Attendance edit-->
+
 				</section>
 
 				<section data-route="books">
 
 					<!-- Begin Admin Home-->
 
-					<h2 class="page-title">Requests</h2>
+					<span id="myHeader">Requests</span>
+					<br><br>
 
 					<!-- Request Card-->
 					<request-card class-name="COP 3245 U03" person-name="Massoud Milani" is-Professor></request-card>
@@ -211,7 +229,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<request-card class-name="COP 4660 U01" person-name="Jonathan Jensen" is-Student></request-card>
 					<!-- End Request Card-->
 
-					<h2 class="page-title">Classes</h2>
+					<br><br>
+					<span id="myHeader">Classes</span>
+					<br><br>
 
 					<!-- Admin class Cards-->
 					<admin-class element-color="var(--paper-green-500)" class-name="COP 2431 U05"></admin-class>
