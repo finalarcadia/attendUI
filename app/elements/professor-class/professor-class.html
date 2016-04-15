@@ -90,33 +90,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 			<iron-icon icon="device:access-time"></iron-icon>
 			<br>
-
-			Class time:
-			<paper-input label="hh:mm:ss" no-label-float></paper-input>
-			-
-			<paper-input label="hh:mm:ss" no-label-float></paper-input>
-			<paper-icon-button icon="check" title="accept"></paper-icon-button>
+			Late threshold:
+			<paper-input label="minutes" hidden$="{{!codeReq}}" no-label-float></paper-input>
+			<paper-icon-button onclick="_toggleToast('#thresholdToast')" icon="check" title="accept"></paper-icon-button>
 			<br>
-			Class date:
-			<paper-input label="mm/dd/yy" no-label-float></paper-input>
-			-
-			<paper-input label="mm/dd/yy" no-label-float></paper-input>
-			<paper-icon-button icon="check" title="accept"></paper-icon-button>
+			Absent threshold:
+			<paper-input label="minutes" hidden$="{{!codeReq}}" no-label-float></paper-input>
+			<paper-icon-button onclick="_toggleToast('#thresholdToast')" icon="check" title="accept"></paper-icon-button>
 			<br>
 
 			<iron-icon icon="device:gps-fixed"></iron-icon>
 			<paper-toggle-button style="float:right;" checked></paper-toggle-button>
 			<br>
 
-			<paper-button><iron-icon icon="maps:pin-drop"></iron-icon>Set location</paper-button>
+			<paper-button onclick="_toggleToast('#locationErrorToast')"><iron-icon icon="maps:pin-drop"></iron-icon>Set location</paper-button>
 			<br>
 
 			<iron-icon icon="editor:border-color"></iron-icon>
 			<paper-toggle-button style="float:right;" checked></paper-toggle-button>
 			<br>
-			Delay allowed:
+			Code threshold:
 			<paper-input label="seconds" hidden$="{{!codeReq}}" no-label-float></paper-input>
-			<paper-icon-button icon="check" title="accept"></paper-icon-button>
+			<paper-icon-button onclick="_toggleToast('#thresholdToast')" icon="check" title="accept"></paper-icon-button>
 		</iron-collapse>
 	</div>
 </paper-card>
@@ -177,5 +172,13 @@ Polymer({
 		this.updateStyles();
 	}
 });
+
+function _toggleToast(toastId) {
+	document.querySelector(toastId).toggle();
+}
+
+function _toggleDialog(dialogId) {
+	document.querySelector(dialogId).toggle();
+}
 </script>
 </dom-module>

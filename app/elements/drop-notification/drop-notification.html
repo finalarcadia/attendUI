@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="student-card">
+<dom-module id="drop-notification">
 	<template>
 	<style include="shared-styles">
 	:host {
@@ -18,20 +18,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 
 	paper-card {
-		width: 225px;
-		color: white;
-		background: var(--my-color);
+		width: 100%;
+		padding: 3px 3px 3px 3px;
+		background-color: var(--paper-red-100);
+	}
+
+	paper-button {
+		display: inline-block;
+		color: var(--my-color);
+	}
+
+	paper-icon-button {
+		display: inline-block;
+		color: var(--my-color);
 	}
 
 	</style>
 
 	<paper-card>
 		<!-- header -->
-		<div class="card-actions">
-			<div style="display: inline-block; margin-top: 8px;">
-				<iron-icon icon="face"></iron-icon>
-				{{personName}}
-			</div>
+		<div class="card-content">
+				<iron-icon icon="feedback"></iron-icon>
+				{{personName}} dropped from {{className}}
+			<span style="float:right;">
+				<paper-icon-button icon="check" title="accept"></paper-icon-button>
+			</span>
 		</div>
 	</paper-card>
 </template>
@@ -39,13 +50,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
 
 Polymer({
-	is: 'student-card',
+	is: 'drop-notification',
 
 	properties: {
 
 		elementColor: {
 			type: String,
 			value: 'var(--accent-color)',
+		},
+
+		className: {
+			type: String,
+			value: 'noClassNameGiven',
 		},
 
 		personName: {

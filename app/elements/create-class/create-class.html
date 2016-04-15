@@ -10,65 +10,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="user-card">
+<dom-module id="create-class">
 	<template>
 	<style include="shared-styles">
 	:host {
 		--my-color: var(--accent-color);
+		--bg-color: white;
 	}
 
-	paper-card {
-		width: 100%;
-		color: white;
-		background: var(--my-color);
-	}
-
-	paper-icon-button {
+	paper-button {
 		display: inline-block;
+		color: var(--bg-color);
 	}
-
 	</style>
 
-	<paper-card>
-		<!-- header -->
-		<div class="card-actions">
-			<div style="display: inline-block; margin-top: 8px;">
-				<iron-icon icon="assignment-ind" hidden$="{{!isProfessor}}"></iron-icon>
-				<iron-icon icon="face" hidden$="{{!isStudent}}"></iron-icon>
-				{{personName}}
-			</div>
-			<span style="float:right;">
-				<paper-icon-button onclick="_toggleDialog('#removeUserDialog')" icon="clear" title="remove"></paper-icon-button>
-			</span>
-		</div>
-	</paper-card>
+	<paper-button onclick="_toggleDialog('#createClassDialog')"><iron-icon icon="add"></iron-icon>Create Class</paper-button>
+
 </template>
 
 <script>
 
 Polymer({
-	is: 'user-card',
+	is: 'create-class',
 
 	properties: {
 
 		elementColor: {
 			type: String,
 			value: 'var(--accent-color)',
-		},
-
-		personName: {
-			type: String,
-			value: 'noPersonNameGiven',
-		},
-
-		isProfessor: {
-			type: Boolean,
-			value: false
-		},
-
-		isStudent: {
-			type: Boolean,
-			value: false
 		}
 
 	},

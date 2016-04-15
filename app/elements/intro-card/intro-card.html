@@ -18,20 +18,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 
 	paper-material {
-		width: 100%;
-		margin-bottom: 32px;
-		padding-left: 30px;
-		padding-right: 30px;
+		border-radius: 2px;
+		height: 100%;
+		padding: 16px 16px 16px 16px;
+		width: calc(98.66% - 16px);
+		margin: 16px auto;
+		background: white;
 	}
 
 	paper-input {
 		--paper-input-container-focus-color: var(--my-color);
 		display: inline-block;
-		width: 75px;
+		width: 130px;
 	}
 
 	paper-button {
 		display: inline-block;
+		float: right;
 		color: var(--my-color);
 	}
 
@@ -41,38 +44,83 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 
 	paper-radio-button {
-		width: 3px;
-		height: 3px;
 		--paper-radio-button-checked-color: var(--my-color);
 		--paper-radio-button-checked-ink-color: var(--my-color);
 	}
 
+	paper-dropdown-menu {
+		width: 292px;
+	}
+
 	#large {
-		width: 183px;
+		width: 292px;
+	}
+
+	#infoText {
+		@apply(--paper-font-subhead);
+		color: var(--my-color);
 	}
 	</style>
 
-	<iron-icon icon="perm-identity"></iron-icon>
-	<paper-input label="Username" no-label-float></paper-input>
-	<iron-icon icon="lock-outline"></iron-icon>
-	<paper-input label="Password" no-label-float></paper-input>
-	<paper-button>Login</paper-button>
-	<br>
-	<iron-icon icon="face"></iron-icon>
-	<paper-input id="large" label="Full name" no-label-float></paper-input>
-	<br>
-	<iron-icon icon="social:school"></iron-icon>
-	<paper-input id="large" label="University" no-label-float></paper-input>
-	<br>
-	<iron-icon icon="folder-shared"></iron-icon>
-	<paper-input label="Id" no-label-float></paper-input>
-	<iron-icon icon="sort"></iron-icon>
-	<paper-radio-group selected="small">
-  		<paper-radio-button name="admin"></paper-radio-button>
-  		<paper-radio-button name="professor"></paper-radio-button>
-  		<paper-radio-button name="student"></paper-radio-button>
-	</paper-radio-group>
-	<paper-button>Register</paper-button>
+	<!-- Begin login-->
+	<paper-material>
+		<iron-icon icon="perm-identity"></iron-icon>
+		<paper-input label="Username" no-label-float></paper-input>
+		<iron-icon icon="lock-outline"></iron-icon>
+		<paper-input label="Password" no-label-float></paper-input>
+		<paper-button onclick="_toggleDialog('#loginErrorDialog')">Login</paper-button>
+	</paper-material>
+
+	<span id="infoText">
+		Don't have an account? Create one!
+	</span>
+
+	<!-- Begin register-->
+	<paper-material>
+		<iron-icon icon="sort"></iron-icon>
+		<paper-radio-group selected="small">
+			<paper-radio-button name="admin">Admin</paper-radio-button>
+			<paper-radio-button name="professor">Professor</paper-radio-button>
+			<paper-radio-button name="student">Student</paper-radio-button>
+		</paper-radio-group>
+		<br>
+
+		<iron-icon icon="social:school"></iron-icon>
+
+		<!-- Admin university -->
+		<!--
+		<paper-input id="large" label="University" no-label-float></paper-input>
+		<br>
+		-->
+
+		<!-- Regular University -->
+		<paper-dropdown-menu label="Select institution">
+			<paper-listbox class="dropdown-content">
+				<!-- University List-->
+				<paper-item>
+					<general-card element-color="{{elementColor}}" text="Florida International University" icon="social:school"></general-card>
+				</paper-item>
+				<paper-item>
+					<general-card element-color="{{elementColor}}" text="Miami International University" icon="social:school"></general-card>
+				</paper-item>
+				<paper-item>
+					<general-card element-color="{{elementColor}}" text="Miami-Dade College" icon="social:school"></general-card>
+				</paper-item>
+			</paper-listbox>
+		</paper-dropdown-menu>
+		<br>
+
+		<iron-icon icon="perm-identity"></iron-icon>
+		<paper-input label="Username" no-label-float></paper-input>
+		<iron-icon icon="lock-outline"></iron-icon>
+		<paper-input label="Password" no-label-float></paper-input>
+		<br>
+		<iron-icon icon="face"></iron-icon>
+		<paper-input label="Full name" no-label-float></paper-input>
+		<iron-icon icon="folder-shared"></iron-icon>
+		<paper-input label="Id" no-label-float></paper-input>
+		<paper-button onclick="_toggleDialog('#usernameTakenDialog')">Register</paper-button>
+</paper-material>
 
 </template>
 
@@ -95,5 +143,13 @@ Polymer({
 		this.updateStyles();
 	}
 });
+
+function _toggleToast(toastId) {
+	document.querySelector(toastId).toggle();
+}
+
+function _toggleDialog(dialogId) {
+	document.querySelector(dialogId).toggle();
+}
 </script>
 </dom-module>

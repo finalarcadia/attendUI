@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="user-card">
+<dom-module id="general-card">
 	<template>
 	<style include="shared-styles">
 	:host {
@@ -18,13 +18,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 
 	paper-card {
-		width: 100%;
+		width: 225px;
 		color: white;
 		background: var(--my-color);
-	}
-
-	paper-icon-button {
-		display: inline-block;
 	}
 
 	</style>
@@ -33,13 +29,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<!-- header -->
 		<div class="card-actions">
 			<div style="display: inline-block; margin-top: 8px;">
-				<iron-icon icon="assignment-ind" hidden$="{{!isProfessor}}"></iron-icon>
-				<iron-icon icon="face" hidden$="{{!isStudent}}"></iron-icon>
-				{{personName}}
+				<iron-icon icon="{{icon}}"></iron-icon>
+				{{text}}
 			</div>
-			<span style="float:right;">
-				<paper-icon-button onclick="_toggleDialog('#removeUserDialog')" icon="clear" title="remove"></paper-icon-button>
-			</span>
 		</div>
 	</paper-card>
 </template>
@@ -47,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
 
 Polymer({
-	is: 'user-card',
+	is: 'general-card',
 
 	properties: {
 
@@ -56,19 +48,14 @@ Polymer({
 			value: 'var(--accent-color)',
 		},
 
-		personName: {
+		text: {
 			type: String,
-			value: 'noPersonNameGiven',
+			value: 'noTextGiven',
 		},
 
-		isProfessor: {
-			type: Boolean,
-			value: false
-		},
-
-		isStudent: {
-			type: Boolean,
-			value: false
+		icon: {
+			type: String,
+			value: 'noIconGiven',
 		}
 
 	},
@@ -78,9 +65,5 @@ Polymer({
 		this.updateStyles();
 	}
 });
-
-function _toggleDialog(dialogId) {
-	document.querySelector(dialogId).toggle();
-}
 </script>
 </dom-module>

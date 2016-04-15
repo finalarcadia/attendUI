@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="user-card">
+<dom-module id="attempt-notification">
 	<template>
 	<style include="shared-styles">
 	:host {
@@ -19,26 +19,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 	paper-card {
 		width: 100%;
-		color: white;
-		background: var(--my-color);
+		padding: 5px 5px 5px 5px;
+		background-color: var(--paper-grey-300);
+	}
+
+	paper-button {
+		display: inline-block;
+		color: var(--my-color);
 	}
 
 	paper-icon-button {
 		display: inline-block;
+		color: var(--my-color);
 	}
 
 	</style>
 
 	<paper-card>
 		<!-- header -->
-		<div class="card-actions">
-			<div style="display: inline-block; margin-top: 8px;">
-				<iron-icon icon="assignment-ind" hidden$="{{!isProfessor}}"></iron-icon>
-				<iron-icon icon="face" hidden$="{{!isStudent}}"></iron-icon>
+		<div class="card-content">
+				<iron-icon icon="maps:local-library"></iron-icon>
+				{{className}}
+				<iron-icon icon="face"></iron-icon>
 				{{personName}}
-			</div>
+				<iron-icon icon="date-range"></iron-icon>
+				{{date}}
 			<span style="float:right;">
-				<paper-icon-button onclick="_toggleDialog('#removeUserDialog')" icon="clear" title="remove"></paper-icon-button>
+				<paper-icon-button icon="check" title="accept"></paper-icon-button>
 			</span>
 		</div>
 	</paper-card>
@@ -47,7 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
 
 Polymer({
-	is: 'user-card',
+	is: 'attempt-notification',
 
 	properties: {
 
@@ -56,19 +63,19 @@ Polymer({
 			value: 'var(--accent-color)',
 		},
 
+		className: {
+			type: String,
+			value: 'noClassNameGiven',
+		},
+
 		personName: {
 			type: String,
 			value: 'noPersonNameGiven',
 		},
 
-		isProfessor: {
-			type: Boolean,
-			value: false
-		},
-
-		isStudent: {
-			type: Boolean,
-			value: false
+		date: {
+			type: String,
+			value: 'noDateGiven',
 		}
 
 	},
@@ -78,9 +85,5 @@ Polymer({
 		this.updateStyles();
 	}
 });
-
-function _toggleDialog(dialogId) {
-	document.querySelector(dialogId).toggle();
-}
 </script>
 </dom-module>

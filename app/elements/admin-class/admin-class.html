@@ -27,10 +27,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		}
 	}
 
-	paper-input {
+	paper-dropdown-menu {
 		--paper-input-container-focus-color: var(--my-color);
-		display: inline-block;
-		width: 75px;
 	}
 
 	paper-button {
@@ -61,13 +59,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<div class="card-actions">
 
 			<!--Add user to class-->
-			<paper-input label="Username" no-label-float></paper-input>
+			<paper-dropdown-menu label="Select person">
+				<paper-listbox class="dropdown-content">
+					<paper-item>
+						<general-card element-color="{{elementColor}}" text="John Smith" icon="face"></general-card>
+					</paper-item>
+					<paper-item>
+						<general-card element-color="{{elementColor}}" text="Laura Hernandez" icon="face"></general-card>
+					</paper-item>
+				</paper-listbox>
+			</paper-dropdown-menu>
 			<paper-button><iron-icon icon="check"></iron-icon>Add</paper-button>
 
 			<!--Dropdown icon-->
 			<paper-icon-button icon="hardware:keyboard-arrow-up" title="settings" onclick="_toggle()"
 			style="float:right;">
-			</paper-icon-button>
+		</paper-icon-button>
 		<script>
 		function _toggle() {
 			var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
@@ -85,7 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			<user-card element-color="{{elementColor}}" person-name="Gabriel Fernandez" is-student></user-card>
 			<user-card element-color="{{elementColor}}" person-name="Jonathan Jensen" is-student></user-card>
 			<!-- End Request Cards-->
-			<paper-fab mini icon="close"></paper-fab>
+			<paper-fab onclick="_toggleDialog('#deleteClassDialog')" mini icon="close"></paper-fab>
 			<br><br><br>
 		</iron-collapse>
 	</div>

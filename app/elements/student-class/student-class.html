@@ -11,198 +11,219 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="student-class">
-    <template>
-        <style include="shared-styles">
-            :host {
-                --my-color: var(--accent-color);
-                --present-color: var(--paper-green-a700);
-                --late-color: var(--paper-amber-500);
-                --absent-color: var(--paper-red-700);
-            }
+	<template>
+	<style include="shared-styles">
+	:host {
+		--my-color: var(--accent-color);
+		--present-color: var(--paper-green-a700);
+		--late-color: var(--paper-amber-500);
+		--absent-color: var(--paper-red-700);
+		--attempt-color: var(--paper-grey-500);
+		--late-percent: 25;
+		--present-percent: 25;
+		--attempt-percent: 25;
+		--absent-percent: 25;
+	}
 
-            paper-card {
-                width: 100%;
-                --paper-card-content: {
-                    font-size: 26px;
-                    font-weight: 500;
-                    color: white;
-                    background: var(--my-color);
-                }
-            }
+	paper-card {
+		width: 100%;
+		--paper-card-content: {
+			font-size: 26px;
+			font-weight: 500;
+			color: white;
+			background: var(--my-color);
+		}
+	}
 
-            paper-icon-button {
-                vertical-align: bottom;
-            }
+	paper-icon-button {
+		vertical-align: bottom;
+	}
 
-            paper-input {
-				--paper-input-container-focus-color: var(--my-color);
-                display: inline-block;
-                width: 90px;
-            }
+	paper-input {
+		--paper-input-container-focus-color: var(--my-color);
+		display: inline-block;
+		width: 90px;
+	}
 
-            paper-button {
-                display: inline-block;
-                color: var(--my-color);
-            }
+	paper-button {
+		display: inline-block;
+		color: var(--my-color);
+	}
 
-			paper-fab {
-                float: right;
-                display: inline-block;
-                --paper-fab-background: var(--my-color);
-            }
+	paper-fab {
+		float: right;
+		display: inline-block;
+		--paper-fab-background: var(--my-color);
+	}
 
-            paper-progress {
-                width: 100%;
-                display: inline-block;
-                vertical-align: top;
-            }
+	iron-collapse {
+		width: 100%;
+	}
 
-            #present {
-                --paper-progress-active-color: var(--present-color);
-            }
+	paper-dialog {
 
-            #presentText {
-                width: 100%;
-                display: inline-block;
-                vertical-align: bottom;
-                @apply(--paper-font-caption);
-                color: var(--present-color);
-            }
+	}
 
-            #late {
-                --paper-progress-active-color: var(--late-color);
-            }
+	#graphContainer {
+		width: 100%;
+		height: 26px;
+		text-align: center;
+	}
 
-            #lateText {
-                width: 100%;
-                display: inline-block;
-                vertical-align: bottom;
-                @apply(--paper-font-caption);
-                color: var(--late-color);
-            }
+	#lateBar {
+		width: var(--late-percent)%;
+		background-color: var(--late-color);
+		display: inline-block;
+		color: white;
+		height: 100%;
+		padding-top: 7px;
+	}
 
-            #absent {
-                --paper-progress-active-color: var(--absent-color);
-            }
+	#presentBar {
+		width: var(--present-percent)%;
+		background-color: var(--present-color);
+		display: inline-block;
+		color: white;
+		height: 100%;
+		padding-top: 7px;
+	}
 
-            #absentText {
-                width: 100%;
-                display: inline-block;
-                vertical-align: bottom;
-                @apply(--paper-font-caption);
-                color: var(--absent-color);
-            }
+	#attemptBar {
+		width: var(--attempt-percent)%;
+		background-color: var(--attempt-color);
+		display: inline-block;
+		color: white;
+		height: 100%;
+		padding-top: 7px;
+	}
 
-        </style>
+	#absentBar {
+		width: var(--absent-percent)%;
+		background-color: var(--absent-color);
+		display: inline-block;
+		color: white;
+		height: 100%;
+		padding-top: 7px;
+	}
 
-        <paper-card>
-            <!-- header -->
-            <div class="card-content">
-                <iron-icon icon="maps:local-library"></iron-icon>
-                {{className}}
-                <iron-icon icon="device:access-time" style="float:right;"></iron-icon>
-                <iron-icon icon="device:gps-fixed" hidden$="{{!locationReq}}" style="float:right;"></iron-icon>
-                <iron-icon icon="editor:border-color" hidden$="{{!codeReq}}" style="float:right;"></iron-icon>
-            </div>
+	#score {
+		color: var(--my-color);
+		@apply(--paper-font-display1);
+	}
 
-            <!-- middle -->
-            <div class="card-actions">
+	</style>
 
-	                <paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
-					<paper-button><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
+	<paper-card>
+		<!-- header -->
+		<div class="card-content">
+			<iron-icon icon="maps:local-library"></iron-icon>
+			{{className}}
+			<iron-icon icon="device:access-time" style="float:right;"></iron-icon>
+			<iron-icon icon="device:gps-fixed" hidden$="{{!locationReq}}" style="float:right;"></iron-icon>
+			<iron-icon icon="editor:border-color" hidden$="{{!codeReq}}" style="float:right;"></iron-icon>
+		</div>
 
-				<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()"
-				style="float: right;"></paper-icon-button>
-                <script>
-                    function _toggle() {
-                        var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
-                        var iconButton = Polymer.dom(event).localTarget;
-                        iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
-                        : 'hardware:keyboard-arrow-down';
-                        moreInfo.toggle();
-                    }
-                </script>
+		<!-- middle -->
+		<div class="card-actions">
 
-                <iron-collapse id="dropdown" style="width:100%;">
-                    <span id="presentText">
-                        Present <span style="float:right;">90%</span>
-                        <br>
-                    </span>
-                    <paper-progress id="present" value="90"></paper-progress>
-                    <br>
-                    <span id="lateText">
-                        Late <span style="float:right;">20%</span>
-                        <br>
-                    </span>
-                    <paper-progress id="late" value="20"></paper-progress>
-                    <br>
-                    <span id="absentText">
-                        Absent <span style="float:right;">10%</span>
-                        <br>
-                    </span>
-                    <paper-progress id="absent" value="10"></paper-progress>
-                    <br>
-					<paper-fab mini icon="close"></paper-fab>
-					<br><br>
-                </iron-collapse>
-            </div>
-        </paper-card>
+			<paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
+			<paper-button onclick="_toggleDialog(recordDialog)"><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
 
-    </template>
+			<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()"
+			style="float: right;"></paper-icon-button>
+			<script>
+			function _toggle() {
+				var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
+				var iconButton = Polymer.dom(event).localTarget;
+				iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+				: 'hardware:keyboard-arrow-down';
+				moreInfo.toggle();
+			}
+			</script>
 
-    <script>
+			<!-- Dropdown Content -->
 
-        Polymer({
-            is: 'student-class',
+			<iron-collapse id="dropdown">
+				<div id="graphContainer">
+					<div id="lateBar">{{late}}%</div><div id="presentBar">{{present}}%</div><div id="attemptBar">{{attempt}}%</div><div id="absentBar">{{absent}}%</div>
+				</div>
+				<br>
+				<span id="score">Score: {{score}}%</span>
+				<paper-fab mini icon="close" onclick="_toggleDialog('#dropClassDialog')"></paper-fab>
+			</iron-collapse>
+		</div>
+	</paper-card>
 
-            properties: {
+</template>
 
-                elementColor: {
-                    type: String,
-                    value: 'var(--accent-color)',
-                },
+<script>
 
-                className: {
-                    type: String,
-                    value: 'noClassNameGiven',
-                },
+Polymer({
+	is: 'student-class',
 
-                locationReq: {
-                    type: Boolean,
-                    value: false
-                },
+	properties: {
 
-                codeReq: {
-                    type: Boolean,
-                    value: false,
-                },
+		elementColor: {
+			type: String,
+			value: 'var(--accent-color)',
+		},
 
-                numTotal: {
-                    type: Number,
-                    value: 1,
-                },
+		className: {
+			type: String,
+			value: 'noClassNameGiven',
+		},
 
-                numPresent: {
-                    type: Number,
-                    value: 1,
-                },
+		locationReq: {
+			type: Boolean,
+			value: false
+		},
 
-                numLate: {
-                    type: Number,
-                    value: 1,
-                },
+		codeReq: {
+			type: Boolean,
+			value: false,
+		},
 
-                numAbsent: {
-                    type: Number,
-                    value: 1,
-                }
+		late: {
+			type: String,
+			value: '25',
+		},
 
-            },
+		present: {
+			type: String,
+			value: '25',
+		},
 
-            ready: function() {
-                this.customStyle['--my-color'] = this.elementColor;
-                this.updateStyles();
-            }
-        });
-    </script>
+		attempt: {
+			type: String,
+			value: '25',
+		},
+
+		absent: {
+			type: String,
+			value: '25',
+		},
+
+		score: {
+			type: String,
+			value: '75',
+		}
+
+	},
+
+	ready: function() {
+		this.customStyle['--my-color'] = this.elementColor;
+		this.customStyle['--late-percent'] = this.late;
+		this.customStyle['--present-percent'] = this.present;
+		this.customStyle['--attempt-percent'] = this.attempt;
+		this.customStyle['--absent-percent'] = this.absent;
+		this.updateStyles();
+	}
+});
+
+var recordDialog = '#presentDialog';
+
+function _toggleDialog(dialogId) {
+	document.querySelector(dialogId).toggle();
+}
+</script>
 </dom-module>

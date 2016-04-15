@@ -10,65 +10,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="user-card">
+<dom-module id="account-panel">
 	<template>
 	<style include="shared-styles">
 	:host {
 		--my-color: var(--accent-color);
-	}
-
-	paper-card {
-		width: 100%;
-		color: white;
-		background: var(--my-color);
+		--bg-color: white;
 	}
 
 	paper-icon-button {
 		display: inline-block;
+		color: white;
 	}
-
 	</style>
 
-	<paper-card>
-		<!-- header -->
-		<div class="card-actions">
-			<div style="display: inline-block; margin-top: 8px;">
-				<iron-icon icon="assignment-ind" hidden$="{{!isProfessor}}"></iron-icon>
-				<iron-icon icon="face" hidden$="{{!isStudent}}"></iron-icon>
-				{{personName}}
-			</div>
-			<span style="float:right;">
-				<paper-icon-button onclick="_toggleDialog('#removeUserDialog')" icon="clear" title="remove"></paper-icon-button>
-			</span>
-		</div>
-	</paper-card>
+	<span style="display: inline-block; width: 80%;">
+		<iron-icon icon="account-circle"></iron-icon>
+		username@school.edu
+	</span>
+	<span style="display: inline-block;">
+		<paper-icon-button icon="highlight-off" title="Log Off" onclick="_toggleDialog('#logOffDialog')"></paper-icon-button>
+	</span>
+
 </template>
 
 <script>
 
 Polymer({
-	is: 'user-card',
+	is: 'account-panel',
 
 	properties: {
 
 		elementColor: {
 			type: String,
 			value: 'var(--accent-color)',
-		},
-
-		personName: {
-			type: String,
-			value: 'noPersonNameGiven',
-		},
-
-		isProfessor: {
-			type: Boolean,
-			value: false
-		},
-
-		isStudent: {
-			type: Boolean,
-			value: false
 		}
 
 	},
