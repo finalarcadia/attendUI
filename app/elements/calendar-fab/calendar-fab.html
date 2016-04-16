@@ -14,7 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<template>
 	<style include="shared-styles">
 	:host {
-		--my-color: {{elementColor}};
+		--current-color: var(--accent-color);
 	}
 	
 	#circle {
@@ -24,15 +24,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		text-align: center;
 		border-radius: 50%;
 		margin: 6px 6px 6px 6px;
-		border: 2px solid var(--my-color);
-		color: var(--my-color);
+		border: 2px solid var(--current-color);
+		color: var(--current-color);
 		line-height: 50px;
 		width: 50px;
 		height: 50px;
 	}
 
 	</style>
-	<div id="circle">{{number}}</div>
+	
+	<script>
+		var presentCol = "1";
+	</script>
+	<paper-button>
+		<div id="circle">{{number}}</div>
+	</paper-button>
 </template>
 
 	<script>
@@ -44,19 +50,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		elementColor: {
 			type: String,
 			value: 'var(--accent-color)',
+			notify: true,
+			observer: '_colorChanged'
 		},
 
 		number: {
 			type: String,
-			value: '0',
+			value: '0'
+		},
+		
+		state: {
+			type: String,
+			value: 'present'
 		}
 
 	},
+	
+	listeners: {
+      'tap': 'toggle'
+    },
 
 	ready: function() {
-		this.customStyle['--my-color'] = this.elementColor;
+		this.customStyle['--current-color'] = this.elementColor;
+		this.updateStyles();
+	},
+	
+	toggle: function() {
+		this.elementColor = colors[i%colors.length];
+		i++;
+	},
+	
+	_colorChanged: function(newValue, oldValue) {
+		this.customStyle['--current-color'] = newValue;
 		this.updateStyles();
 	}
 });
+
+var colors = ["var(--paper-green-a700)", "var(--paper-amber-500)", "var(--paper-red-700)", "var(--paper-grey-500)"];
+var i = 0;
 	</script>
 </dom-module>

@@ -101,7 +101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	
 	#calendarContainer {
 		display: inline-block;
-		background-color: lightcyan;
 		width: 100%;
 		font-size:0px;
   		line-height:0px;
@@ -110,7 +109,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	#calendarItem {
 		display: inline-block;
 		text-align: center;
-		background-color: lightseagreen;
 		width: calc(100%/7);
 	}
 
@@ -151,25 +149,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<div id="calendarContainer">
 						<!--row 0-->
 						<div id="calendarItem">
-							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+							<calendar-fab element-color="var(--paper-amber-500)" number="1"></calendar-fab>
 						</div>
 						<div id="calendarItem">
 							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
 						</div>
 						<div id="calendarItem">
-							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+							<calendar-fab element-color="var(--paper-amber-500)" number="3"></calendar-fab>
 						</div>
 						<div id="calendarItem">
-							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+							<calendar-fab element-color="var(--paper-amber-500)" number="4"></calendar-fab>
 						</div>
 						<div id="calendarItem">
-							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+							<calendar-fab element-color="var(--paper-amber-500)" number="5"></calendar-fab>
 						</div>
 						<div id="calendarItem">
-							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+							<calendar-fab element-color="var(--paper-amber-500)" number="6"></calendar-fab>
 						</div>
 						<div id="calendarItem">
-							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+							<calendar-fab element-color="var(--paper-amber-500)" number="7"></calendar-fab>
+						</div>
+						<div id="calendarItem">
+							<calendar-fab element-color="var(--paper-amber-500)" number="8"></calendar-fab>
 						</div>
 					</div>
 				</div>
@@ -229,10 +230,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				this.updateStyles();
 			}
 		});
-
-		var presentCol = "var(--paper-green-a700)";
-		var lateCol = "--paper-amber-500";
-		var absentCol = "--paper-red-700";
-		var attemptCol = "--paper-grey-500";
 	</script>
 </dom-module>
