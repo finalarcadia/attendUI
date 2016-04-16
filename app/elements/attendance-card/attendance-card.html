@@ -51,17 +51,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		--paper-fab-background: var(--my-color);
 	}
 
-	#calendar {
-		display: inline-block;
-		width: 75%;
-		margin-left: 15%;
-	}
-
-	#month {
-		@apply(--paper-font-display2);
-		color: var(--my-color);
-	}
-
 	#graphContainer {
 		width: 100%;
 		height: 26px;
@@ -109,6 +98,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		color: var(--my-color);
 		@apply(--paper-font-display1);
 	}
+	
+	#calendarContainer {
+		display: inline-block;
+		background-color: lightcyan;
+		width: 100%;
+		font-size:0px;
+  		line-height:0px;
+	}
+	
+	#calendarItem {
+		display: inline-block;
+		text-align: center;
+		background-color: lightseagreen;
+		width: calc(100%/7);
+	}
+
+	#month {
+		@apply(--paper-font-display2);
+		color: var(--my-color);
+	}
 	</style>
 
 	<paper-card>
@@ -138,98 +147,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						<div id="lateBar">{{late}}%</div><div id="presentBar">{{present}}%</div><div id="attemptBar">{{attempt}}%</div><div id="absentBar">{{absent}}%</div>
 					</div>
 					<br>
-
-					<div id="calendar">
-						<br>
-						<span id="month">May 2016
-							<iron-icon icon="unfold-more"></iron-icon>
-						</span>
-						<br><br>
-						<calendar-fab element-color="white" number="1"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-amber-500)" number="3"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-grey-500)" number="4"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="5"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="6"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="white" number="7"></calendar-fab>
-						&nbsp;
-
-						<br><br>
-
-						<calendar-fab element-color="white" number="8"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="9"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="10"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-red-700)" number="11"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-amber-500)" number="12"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="13"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="white" number="14"></calendar-fab>
-						&nbsp;
-
-
-						<br><br>
-
-						<calendar-fab element-color="white" number="15"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="16"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-amber-500)" number="17"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="18"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="19"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-red-700)" number="20"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="white" number="21"></calendar-fab>
-						&nbsp;
-
-						<br><br>
-
-						<calendar-fab element-color="white" number="22"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="23"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-grey-500)" number="24"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-green-a700)" number="25"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-amber-500)" number="26"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-red-700)" number="27"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="white" number="28"></calendar-fab>
-						&nbsp;
-
-						<br><br>
-
-						<calendar-fab element-color="white" number="29"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-red-700)" number="30"></calendar-fab>
-						&nbsp;
-						<calendar-fab element-color="var(--paper-amber-500)" number="31"></calendar-fab>
-						&nbsp;
-
-						<br><br>
+					
+					<div id="calendarContainer">
+						<!--row 0-->
+						<div id="calendarItem">
+							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+						</div>
+						<div id="calendarItem">
+							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+						</div>
+						<div id="calendarItem">
+							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+						</div>
+						<div id="calendarItem">
+							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+						</div>
+						<div id="calendarItem">
+							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+						</div>
+						<div id="calendarItem">
+							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+						</div>
+						<div id="calendarItem">
+							<calendar-fab element-color="var(--paper-amber-500)" number="2"></calendar-fab>
+						</div>
 					</div>
 				</div>
 			</paper-card>
 
 		</template>
 
-		<script>
-
+	<script>
 		Polymer({
 			is: 'attendance-card',
 
@@ -286,6 +234,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		var lateCol = "--paper-amber-500";
 		var absentCol = "--paper-red-700";
 		var attemptCol = "--paper-grey-500";
-
-		</script>
-	</dom-module>
+	</script>
+</dom-module>
