@@ -15,14 +15,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<style include="shared-styles">
 	:host {
 		--my-color: var(--accent-color);
-		--present-color: var(--paper-green-a700);
-		--late-color: var(--paper-amber-500);
-		--absent-color: var(--paper-red-700);
-		--attempt-color: var(--paper-grey-500);
-		--late-percent: 25;
-		--present-percent: 25;
-		--attempt-percent: 25;
-		--absent-percent: 25;
 	}
 
 	paper-card {
@@ -58,52 +50,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 	iron-collapse {
 		width: 100%;
-	}
-
-	paper-dialog {
-
-	}
-
-	#graphContainer {
-		width: 100%;
-		height: 26px;
-		text-align: center;
-	}
-
-	#lateBar {
-		width: var(--late-percent)%;
-		background-color: var(--late-color);
-		display: inline-block;
-		color: white;
-		height: 100%;
-		padding-top: 7px;
-	}
-
-	#presentBar {
-		width: var(--present-percent)%;
-		background-color: var(--present-color);
-		display: inline-block;
-		color: white;
-		height: 100%;
-		padding-top: 7px;
-	}
-
-	#attemptBar {
-		width: var(--attempt-percent)%;
-		background-color: var(--attempt-color);
-		display: inline-block;
-		color: white;
-		height: 100%;
-		padding-top: 7px;
-	}
-
-	#absentBar {
-		width: var(--absent-percent)%;
-		background-color: var(--absent-color);
-		display: inline-block;
-		color: white;
-		height: 100%;
-		padding-top: 7px;
 	}
 
 	#score {
@@ -144,9 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			<!-- Dropdown Content -->
 
 			<iron-collapse id="dropdown">
-				<div id="graphContainer">
-					<div id="lateBar">{{late}}%</div><div id="presentBar">{{present}}%</div><div id="attemptBar">{{attempt}}%</div><div id="absentBar">{{absent}}%</div>
-				</div>
+				<student-bar late="20" present="60" attempt="5" absent="15"></student-bar>
 				<br>
 				<span id="score">Score: {{score}}%</span>
 				<paper-fab mini icon="close" onclick="_toggleDialog('#dropClassDialog')"></paper-fab>
@@ -183,26 +127,6 @@ Polymer({
 			value: false,
 		},
 
-		late: {
-			type: String,
-			value: '25',
-		},
-
-		present: {
-			type: String,
-			value: '25',
-		},
-
-		attempt: {
-			type: String,
-			value: '25',
-		},
-
-		absent: {
-			type: String,
-			value: '25',
-		},
-
 		score: {
 			type: String,
 			value: '75',
@@ -212,10 +136,6 @@ Polymer({
 
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
-		this.customStyle['--late-percent'] = this.late;
-		this.customStyle['--present-percent'] = this.present;
-		this.customStyle['--attempt-percent'] = this.attempt;
-		this.customStyle['--absent-percent'] = this.absent;
 		this.updateStyles();
 	}
 });

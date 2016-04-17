@@ -32,10 +32,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 
 	</style>
-	
-	<script>
-		var presentCol = "1";
-	</script>
 	<paper-button>
 		<div id="circle">{{number}}</div>
 	</paper-button>
@@ -49,8 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 		elementColor: {
 			type: String,
-			value: 'var(--accent-color)',
-			notify: true,
+			value: 'var(--paper-grey-500)',
 			observer: '_colorChanged'
 		},
 
@@ -59,9 +54,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			value: '0'
 		},
 		
+		counter: {
+			type: Number,
+			value: -1
+		},
+		
 		state: {
 			type: String,
-			value: 'present'
+			value: 'attempt',
+			notify: true
 		}
 
 	},
@@ -71,13 +72,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     },
 
 	ready: function() {
+		if (this.state == "present"){
+			this.counter = 0;
+			this.elementColor = colors[this.counter%colors.length];
+			this.state = states[this.counter%states.length];
+		} else if (this.state == "late"){
+			this.counter = 1;
+			this.elementColor = colors[this.counter%colors.length];
+			this.state = states[this.counter%states.length];
+		} else if (this.state == "absent"){
+			this.counter = 2;
+			this.elementColor = colors[this.counter%colors.length];
+			this.state = states[this.counter%states.length];	
+		}
 		this.customStyle['--current-color'] = this.elementColor;
 		this.updateStyles();
 	},
 	
 	toggle: function() {
-		this.elementColor = colors[i%colors.length];
-		i++;
+		this.counter++;
+		this.elementColor = colors[this.counter%colors.length];
+		this.state = states[this.counter%states.length];
 	},
 	
 	_colorChanged: function(newValue, oldValue) {
@@ -86,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 });
 
-var colors = ["var(--paper-green-a700)", "var(--paper-amber-500)", "var(--paper-red-700)", "var(--paper-grey-500)"];
-var i = 0;
+var states = ["present", "late", "absent"];
+var colors = ["var(--paper-green-a700)", "var(--paper-amber-500)", "var(--paper-red-700)"];
 	</script>
 </dom-module>
