@@ -62,12 +62,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		text-align: center;
 		width: calc(100%/7);
 	}
-
-	#month {
+	
+	#monthContainer {
 		width: 100%;
-		@apply(--paper-font-display2);
 		color: var(--my-color);
 		text-align: center;
+	}
+
+	#monthText {
+		@apply(--paper-font-display2);
 	}
 	</style>
 
@@ -96,11 +99,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 					<student-bar></student-bar>
 					<br>
-					<div id="month">
-						<paper-button ><iron-icon icon="chevron-left"></iron-icon></paper-button>
-						May
-						<paper-button ><iron-icon icon="chevron-right"></iron-icon></paper-button>
-						
+					<div id="monthContainer">
+					<paper-icon-button icon="chevron-left"></paper-icon-button>
+					<span id="monthText">May</span>
+					<paper-icon-button icon="chevron-right"></paper-icon-button>
 					</div>
 					<br>
 					
