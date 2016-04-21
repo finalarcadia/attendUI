@@ -1,0 +1,17 @@
+<dom-module id="test-element">
+  <template>
+    <span>{{doThisOnce()}}</span>
+  </template>
+
+  <script>
+   Polymer({
+
+     is: 'test-element',
+
+     doThisOnce: function() {
+       return Math.random();
+     }
+
+   });
+  </script>
+</dom-module>
