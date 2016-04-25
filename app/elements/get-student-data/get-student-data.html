@@ -1,0 +1,35 @@
+<dom-module id="get-student-data">
+  <template>
+    <iron-ajax
+        auto
+        id="studentAjax"
+        method="GET"
+        handle-as="json"
+        last-response="{{studentData}}"
+        url="http://127.0.0.1:8000/myapp/classes">
+    </iron-ajax>
+    <template is="dom-repeat" items="{{studentData.results}}">
+        <student-class class-name$="{{item.classId}}"></student-class>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+
+    is: 'get-student-data',
+     
+    properties: {
+
+		studentData: {
+			type: Object,
+		}
+
+	   },
+     
+     getInfo: function(){
+         console.log("the response is", this.studentData);
+     }
+
+   });
+  </script>
+</dom-module>

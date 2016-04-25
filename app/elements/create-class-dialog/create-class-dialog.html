@@ -64,7 +64,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     		url="http://127.0.0.1:8000/myapp/classes/">
 		</iron-ajax>
 		<div class="buttons">
-			<paper-button on-click="lool">Test</paper-button>
 			<paper-button dialog-dismiss>Cancel</paper-button>
 			<paper-button on-click="startAjax" dialog-confirm>Create</paper-button>
 		</div>
@@ -92,13 +91,13 @@ Polymer({
 	},
 	
 	makeheaders: function(user, pass){
-		//headers="{{makeheaders(user,pass)}}"
         var obj = {};
-        obj.Authorization = "Basic " + btoa(user + ":" + pass);
+        obj.Authorization = "Basic " + btoa("final" + ":" + "evolution2");
         return obj;  
     },
 	
 	startAjax: function(){
+		this.classData.universityKey = "1";
 		this.$.createClassAjax.generateRequest();
 	},
 	

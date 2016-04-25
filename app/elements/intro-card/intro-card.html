@@ -1,11 +1,5 @@
 <!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+Login and Register Code
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
@@ -65,10 +59,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<!-- Begin login-->
 	<paper-material>
 		<iron-icon icon="perm-identity"></iron-icon>
-		<paper-input label="Username" no-label-float></paper-input>
+		<paper-input label="Username" value="{{username}}" no-label-float></paper-input>
 		<iron-icon icon="lock-outline"></iron-icon>
-		<paper-input label="Password" no-label-float></paper-input>
-		<paper-button onclick="_toggleDialog('#loginErrorDialog')">Login</paper-button>
+		<paper-input label="Password" value="{{password}}" no-label-float></paper-input>
+		<paper-button on-click="_login">Login</paper-button>
 	</paper-material>
 
 	<span id="infoText">
@@ -76,50 +70,108 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	</span>
 
 	<!-- Begin register-->
-	<paper-material>
+	<paper-material id="paperParent">
 		<iron-icon icon="sort"></iron-icon>
-		<paper-radio-group selected="small">
-			<paper-radio-button name="admin">Admin</paper-radio-button>
-			<paper-radio-button name="professor">Professor</paper-radio-button>
-			<paper-radio-button name="student">Student</paper-radio-button>
+		<paper-radio-group selected="{{userDetailData.userType}}">
+			<paper-radio-button name="admin" on-click="universityListOff">Admin</paper-radio-button>
+			<paper-radio-button name="professor" on-click="universityListOn">Professor</paper-radio-button>
+			<paper-radio-button name="student" on-click="universityListOn">Student</paper-radio-button>
 		</paper-radio-group>
 		<br>
-
-		<iron-icon icon="social:school"></iron-icon>
-
+		
 		<!-- Admin university -->
-		<!--
-		<paper-input id="large" label="University" no-label-float></paper-input>
+		<div id="adminUniversity" style="visibility: hidden;">
+		<iron-icon icon="social:school"></iron-icon>
+		<paper-input id="large" label="University" value="{{universityData.universityName}}" no-label-float></paper-input>
 		<br>
-		-->
+		</div>
 
 		<!-- Regular University -->
-		<paper-dropdown-menu label="Select institution">
-			<paper-listbox class="dropdown-content">
+		<div id="regularUniversity" style="visibility: hidden;">
+		<iron-icon icon="social:school"></iron-icon>
+		<iron-ajax
+			auto
+			id="universityListAjax"
+			method="GET"
+			handle-as="json"
+			last-response="{{universityList}}"
+			url="http://127.0.0.1:8000/myapp/universities/">
+    	</iron-ajax>
+		<paper-dropdown-menu label="Select university">
+			<paper-listbox class="dropdown-content" selected-item="{{universitySelection}}">
 				<!-- University List-->
-				<paper-item>
-					<general-card element-color="{{elementColor}}" text="Florida International University" icon="social:school"></general-card>
-				</paper-item>
-				<paper-item>
-					<general-card element-color="{{elementColor}}" text="Miami International University" icon="social:school"></general-card>
-				</paper-item>
-				<paper-item>
-					<general-card element-color="{{elementColor}}" text="Miami-Dade College" icon="social:school"></general-card>
-				</paper-item>
+				<template is="dom-repeat" items="{{universityList.results}}">
+        			<paper-item>
+						<general-card element-color="{{elementColor}}" text$="{{item.universityName}}" pk$="{{item.universityPK}}" icon="social:school"></general-card>
+					</paper-item>
+    			</template>
 			</paper-listbox>
 		</paper-dropdown-menu>
 		<br>
+		</div>
 
+		<paper-button on-click="getInfo">INFO</paper-button>
+		
 		<iron-icon icon="perm-identity"></iron-icon>
-		<paper-input label="Username" no-label-float></paper-input>
+		<paper-input label="Username" value="{{userData.username}}" no-label-float></paper-input>
 		<iron-icon icon="lock-outline"></iron-icon>
-		<paper-input label="Password" no-label-float></paper-input>
+		<paper-input label="Password" value="{{userData.password}}" no-label-float></paper-input>
 		<br>
 		<iron-icon icon="face"></iron-icon>
-		<paper-input label="Full name" no-label-float></paper-input>
+		<paper-input label="First name" value="{{userData.first_name}}" no-label-float></paper-input>
+		<paper-input label="Last name" value="{{userData.last_name}}" no-label-float></paper-input><br>
 		<iron-icon icon="folder-shared"></iron-icon>
-		<paper-input label="Id" no-label-float></paper-input>
-		<paper-button onclick="_toggleDialog('#usernameTakenDialog')">Register</paper-button>
+		<paper-input label="Id" value="{{userDetailData.schoolId}}" no-label-float></paper-input>
+		<paper-button on-click="_register">Register</paper-button>
+		
+		<template is="dom-if" if="{{loading}}">
+			<h1>LOADING</h1>
+		</template>
+		<iron-ajax
+			id = "loginAjax"
+			method="GET"
+			handle-as="json"
+			loading="{{loading}}"
+			on-loading-changed="_onLoadingChangedL1"
+			last-response="{{responseData}}"
+    		url="http://127.0.0.1:8000/myapp/auth/{{username}}/{{password}}/">
+		</iron-ajax>
+		<iron-ajax
+			id = "fetchUserDetailAjax"
+			method="GET"
+			handle-as="json"
+			loading="{{loading}}"
+			on-loading-changed="_onLoadingChangedL2"
+			last-response="{{responseData}}"
+    		url="http://127.0.0.1:8000/myapp/userdetails/{{responseData.id}}/">
+		</iron-ajax>
+		<iron-ajax
+			id = "registerAjax"
+			method="POST"
+			content-type="application/x-www-form-urlencoded"
+			body="{{userData}}"
+			loading="{{loading}}"
+			on-loading-changed="_onLoadingChangedR"
+			last-response="{{responseData}}"
+    		url="http://127.0.0.1:8000/myapp/users/">
+		</iron-ajax>
+		<iron-ajax
+			id = "createUserDetailAjax"
+			method="POST"
+			content-type="application/x-www-form-urlencoded"
+			body="{{userDetailData}}"
+    		url="http://127.0.0.1:8000/myapp/userdetails/">
+		</iron-ajax>
+		<iron-ajax
+			id = "createUniversitylAjax"
+			method="POST"
+			content-type="application/x-www-form-urlencoded"
+			body="{{universityData}}"
+			loading="{{loading}}"
+			on-loading-changed="_onLoadingChangedRS"
+    		url="http://127.0.0.1:8000/myapp/userdetails/">
+		</iron-ajax>
+		
 </paper-material>
 
 </template>
@@ -133,7 +185,51 @@ Polymer({
 
 		elementColor: {
 			type: String,
-			value: 'var(--accent-color)',
+			value: 'var(--accent-color)'
+		},
+		
+		username: {
+			type: String
+		},
+		
+		password: {
+			type: String
+		},
+		
+		userData: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		userDetailData: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		universityData: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		universityList: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		universitySelection: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		responseData: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		loading: {
+			type: Boolean,
+			notify: true,
+			value: false
 		}
 
 	},
@@ -141,15 +237,68 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
-	}
+	},
+	
+	getInfo: function(){
+		console.log("response", this.responseData);
+		console.log("user", document.querySelector('#global').userPK);
+		console.log("uni", document.querySelector('#global').universityPK);
+		console.log("type", document.querySelector('#global').userType);
+     },
+	 
+	 universityListOn: function(){
+		 this.$.regularUniversity.style.visibility='visible';
+		 this.$.adminUniversity.style.visibility='hidden';
+		 //Polymer.dom(this.$.paperParent).appendChild(this.$.regularUniversity);
+		 //Polymer.dom(this.$.paperParent).removeChild(this.$.adminUniversity);
+	 },
+	 
+	 universityListOff: function(){
+		 this.$.adminUniversity.style.visibility='visible';
+		 this.$.regularUniversity.style.visibility='hidden';
+		 //Polymer.dom(this.$.paperParent).appendChild(this.$.adminUniversity);
+		 //Polymer.dom(this.$.paperParent).removeChild(this.$.regularUniversity);
+	 },
+	 
+	 _login: function(){
+		 this.$.loginAjax.generateRequest();
+	 },
+	 
+	 _register: function(){
+		this.$.registerAjax.generateRequest();
+	},
+	
+	_onLoadingChangedR: function(){
+		if (this.loading == true){
+			//Set up global values
+			document.querySelector('#global').userPK = this.responseData.id;
+			document.querySelector('#global').universityPK = this.universitySelection.firstElementChild.pk;
+			document.querySelector('#global').userType = this.userDetailData.userType;
+			//Populate user detail data
+			//university
+			this.userDetailData.universityKey = this.universitySelection.firstElementChild.pk;
+			//userId
+			this.userDetailData.userIdKey = document.querySelector('#global').userPK
+			this.$.createUserDetailAjax.generateRequest();
+		}
+	  },
+	  
+	  _onLoadingChangedL1: function(){
+		if (this.loading == true){
+			//Set up global values
+			document.querySelector('#global').userPK = this.responseData.id;
+			this.$.fetchUserDetailAjax.generateRequest();
+		}
+	  },
+	  
+	  _onLoadingChangedL2: function(){
+		if (this.loading == false){
+			//Set up global values
+			document.querySelector('#global').universityPK = this.responseData.universityKey;
+			document.querySelector('#global').userType = this.responseData.userType;
+		}
+	  },
+	
 });
-
-function _toggleToast(toastId) {
-	document.querySelector(toastId).toggle();
-}
-
-function _toggleDialog(dialogId) {
-	document.querySelector(dialogId).toggle();
-}
 </script>
 </dom-module>

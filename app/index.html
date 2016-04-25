@@ -62,7 +62,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body unresolved>
 	<span id="browser-sync-binding"></span>
 	<template is="dom-bind" id="app">
-
+		<!-- Global Variables -->
+		<global-vars id="global"></global-vars>
 		<paper-drawer-panel id="paperDrawerPanel">
 			<!-- Drawer Scroll Header Panel -->
 			<paper-scroll-header-panel id="leftPanel" drawer fixed>
@@ -146,25 +147,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<!-- End Welcome Page-->
 
 				<!-- Begin Student Page-->
-				<section data-route="student">
-
+				<section data-route="student" onload="handleAjax()">
+					
 					<span id="myHeader">My Classes</span>
-					<br><br>
-
-					<!-- Class Card-->
-					<student-class class-name="Operating Systems" location-req code-req score="85"></student-class>
-					<!-- End Class Card-->
-					<br><br>
-					<!-- Class Card-->
-					<student-class element-color="var(--paper-teal-500)" class-name="Software Engineering" location-req></student-class>
-					<!-- End Class Card-->
-					<br><br>
-					<!-- Class Card-->
-					<student-class element-color="var(--paper-amber-500)" class-name="Net-Centric Computing" ></student-class>
-					<!-- End Class Card-->
-					<br><br>
-
-
+					
+					<get-student-data></get-student-data>
+					
+					<!-- Student Class Card Example-->
+					<student-class element-color="var(--paper-teal-500)" class-name="Software Engineering" location-req code-req score="85"></student-class>
+					
 				</section>
 				<!-- End Student Page-->
 
