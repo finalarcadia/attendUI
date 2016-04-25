@@ -12,19 +12,39 @@
 
 		userPK: {
 			type: String,
-			value: '-1'
 		},
         
         universityPK: {
 			type: String,
-			value: '-1'
 		},
         
         userType: {
             type: String,
-            value: 'none'
+        },
+        
+        count: {
+            type: Number
         }
-     }
+     },
+        
+        startUi: function() {
+            if (this.userType == "student"){
+                document.querySelector('#app').isStudent = true;
+                document.querySelector('#app').isProfessor = false;
+                document.querySelector('#app').isAdmin = false;
+            }
+            else if (this.userType == "professor"){
+                document.querySelector('#app').isProfessor = true;
+                document.querySelector('#app').isStudent = false;
+                document.querySelector('#app').isAdmin = false;
+            }
+            else if (this.userType == "admin"){
+                document.querySelector('#app').isAdmin = true;
+                document.querySelector('#app').isStudent = false;
+                document.querySelector('#app').isProfessor = false;
+                
+            }
+	    }
 
    });
   </script>

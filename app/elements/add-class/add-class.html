@@ -40,21 +40,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 	</style>
 
+	<template is="dom-if" if="{{bool}}">
 	<paper-dropdown-menu label="Add Class">
-		<paper-listbox class="dropdown-content">
+		<paper-listbox class="dropdown-content" selected-item="{{classSelection}}">
 			<!-- Class List-->
-			<paper-item>
-				<general-card element-color="{{elementColor}}" text="COP 3214 U01" icon="maps:local-library"></general-card>
-			</paper-item>
-			<paper-item>
-				<general-card element-color="{{elementColor}}" text="MAD 1342 U01" icon="maps:local-library"></general-card>
-			</paper-item>
-			<paper-item>
-				<general-card element-color="{{elementColor}}" text="NET 2351 U01" icon="maps:local-library"></general-card>
-			</paper-item>
+				<template is="dom-repeat" items="{{classList.results}}">
+        			<paper-item>
+						<general-card element-color="{{elementColor}}" text$="{{item.classId}}" pk$="{{item.classPK}}" icon="maps:local-library"></general-card>
+					</paper-item>
+    			</template>
 		</paper-listbox>
 	</paper-dropdown-menu>
-	<paper-icon-button icon="add" onclick="_toggleToast('#addClassToast')"></paper-icon-button>
+	<paper-icon-button icon="add" on-click="_getClassList"></paper-icon-button>
+	</template>
+	
+	<iron-ajax
+		id = "uniClassListAjax"
+		method="GET"
+		handle-as="json"
+		on-response="_handleUniClassListResponse"
+		last-response="{{classList}}"
+		url="http://127.0.0.1:8000/myapp/classes/?universityKey={{pk}}">
+	</iron-ajax>
+	<!--TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO-->
+	<iron-ajax
+			id = "createRequestAjax"
+			method="POST"
+			content-type="application/x-www-form-urlencoded"
+			body="{{userData}}"
+			on-response="_handleRegisterResponse"
+			last-response="{{responseData}}"
+    		url="http://127.0.0.1:8000/myapp/users/">
+		</iron-ajax>
 
 </template>
 
@@ -68,6 +85,25 @@ Polymer({
 		elementColor: {
 			type: String,
 			value: 'var(--accent-color)',
+		},
+		
+		pk: {
+			type: String
+		},
+		
+		bool: {
+			type: Boolean,
+			value: false
+		},
+		
+		classList: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		classData: {
+			type: Object,
+			value: function() { return {}; }	
 		}
 
 	},
@@ -75,11 +111,17 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
+		this.pk = document.querySelector('#global').universityPK;
+		console.log("response", this.pk);
+		this.$.uniClassListAjax.generateRequest();
+	},
+	
+	_getClassList: function() {
+	},
+	
+	_handleUniClassListResponse: function() {
+		this.bool = true;
 	}
 });
-
-function _toggleToast(toastId) {
-	document.querySelector(toastId).toggle();
-}
 </script>
 </dom-module>

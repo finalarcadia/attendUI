@@ -1,13 +1,4 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 
 <html lang="en">
 
@@ -62,6 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body unresolved>
 	<span id="browser-sync-binding"></span>
 	<template is="dom-bind" id="app">
+		
 		<!-- Global Variables -->
 		<global-vars id="global"></global-vars>
 		<paper-drawer-panel id="paperDrawerPanel">
@@ -85,26 +77,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						<iron-icon icon="donut-large"></iron-icon>
 						<span>Welcome</span>
 					</a>
-
+					
+					<template is="dom-if" if="{{isStudent}}">
 					<a data-route="student" href="{{baseUrl}}student">
 						<iron-icon icon="face"></iron-icon>
 						<span>Home</span>
 					</a>
+					</template>
 
+					<template is="dom-if" if="{{isProfessor}}">
 					<a data-route="professor" href="{{baseUrl}}professor">
 						<iron-icon icon="assignment-ind"></iron-icon>
 						<span>Home</span>
 					</a>
+					</template>
 
+					<template is="dom-if" if="{{isProfessor}}">
 					<a data-route="attendance" href="{{baseUrl}}attendance">
 						<iron-icon icon="date-range"></iron-icon>
 						<span>Attendance</span>
 					</a>
+					</template>
 
+					<template is="dom-if" if="{{isAdmin}}">
 					<a data-route="admin" href="{{baseUrl}}admin">
 						<iron-icon icon="build"></iron-icon>
 						<span>Home</span>
 					</a>
+					</template>
+					
 				</paper-menu>
 			</paper-scroll-header-panel>
 
@@ -117,9 +118,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<span class="space"></span>
 
 					<!-- Create Class (Admin only)-->
+					<template is="dom-if" if="{{isAdmin}}">
 					<create-class></create-class>
+					</template>
 					<!-- Add Class (Professor & Student)-->
+					<template is="dom-if" if="{{isStudent}}">
 					<add-class></add-class>
+					</template>
+					<template is="dom-if" if="{{isProfessor}}">
+					<add-class></add-class>
+					</template>
 
 					<!-- Application name -->
 					<div class="middle middle-container">
@@ -145,19 +153,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<!-- End Welcome Page-->
 
 				<!-- Begin Student Page-->
-				<section data-route="student" onload="handleAjax()">
+				<template is="dom-if" if="{{isStudent}}">
+				<section data-route="student">
 					
 					<span id="myHeader">My Classes</span>
-					
-					<get-student-data></get-student-data>
 					
 					<!-- Student Class Card Example-->
 					<student-class element-color="var(--paper-teal-500)" class-name="Software Engineering" location-req code-req score="85"></student-class>
 					
 				</section>
+				</template>
 				<!-- End Student Page-->
 
 				<!-- Begin Professor Page-->
+				<template is="dom-if" if="{{isProfessor}}">
 				<section data-route="professor">
 
 					<span id="myHeader">Roster Notifications</span>
@@ -199,10 +208,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<!-- End Attendance Cards-->
 
 				</section>
+				</template>
 				<!-- End Attendance Page-->
 
 				<!-- Begin Admin Page-->
+				<template is="dom-if" if="{{isAdmin}}">
 				<section data-route="admin">
+					
+					<get-admin-data></get-admin-data>
 
 					<span id="myHeader">Requests</span>
 					<br><br>
@@ -231,7 +244,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<!-- End Admin class Cards-->
 
 				</section>
-				<!-- Begin Admin Page-->
+				</template>
+				<!-- End Admin Page-->
 
 			</iron-pages>
 		</div>
@@ -242,25 +256,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
 </paper-toast>
 
-<!-- Uncomment next block to enable Service Worker support (1/2) -->
-<!--
-<paper-toast id="caching-complete"
-duration="6000"
-text="Caching complete! This app will work offline.">
-</paper-toast>
-
-<platinum-sw-register auto-register
-clients-claim
-skip-waiting
-base-uri="bower_components/platinum-sw/bootstrap"
-on-service-worker-installed="displayInstalledToast">
-<platinum-sw-cache default-cache-strategy="fastest"
-cache-config-file="cache-config.json">
-</platinum-sw-cache>
-</platinum-sw-register>
--->
-
 </template>
+
+<script>
+  var app = document.querySelector('#app');
+
+  // The dom-change event signifies when the template has stamped its DOM.
+  app.addEventListener('dom-change', function() {
+	  
+    app.isStudent = false;
+	app.isProfessor = false;
+	app.isAdmin = false;
+	
+  });
+</script>
 
 <!-- build:js scripts/app.js -->
 <script src="scripts/app.js"></script>

@@ -1,0 +1,44 @@
+<dom-module id="get-admin-data">
+  <template>
+    <iron-ajax
+		id = "adminClassListAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{classList}}"
+		url="http://127.0.0.1:8000/myapp/classes/?universityKey={{pk}}">
+	</iron-ajax>
+    <template is="dom-repeat" items="{{classList.results}}">
+        <admin-class class-name$="{{item.classId}}" class-pk$="{{item.classPK}}"></admin-class>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+
+    is: 'get-admin-data',
+     
+    properties: {
+		
+		pk: {
+			type: String
+		},
+		
+		classList: {
+			type: Object,
+			value: function() { return {}; }	
+		}
+
+	   },
+       
+    ready: function() {
+		this.pk = document.querySelector('#global').universityPK;
+		this.$.adminClassListAjax.generateRequest();
+	},
+     
+     getInfo: function(){
+         console.log("the response is", this.classList);
+     }
+
+   });
+  </script>
+</dom-module>

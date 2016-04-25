@@ -129,7 +129,7 @@ Login and Register Code
 			handle-as="json"
 			on-response="_handleLoginResponse"
 			last-response="{{responseData}}"
-    		url="http://127.0.0.1:8000/myapp/auth/{{username}}/{{password}}/">
+    		url="http://127.0.0.1:8000/myapp/users/?username={{username}}&password={{password}}">
 		</iron-ajax>
 		<iron-ajax
 			id = "fetchUserDetailAjax"
@@ -137,7 +137,7 @@ Login and Register Code
 			handle-as="json"
 			on-response="_handleFetchResponse"
 			last-response="{{responseData}}"
-    		url="http://127.0.0.1:8000/myapp/userdetails/{{responseData.id}}/">
+    		url="http://127.0.0.1:8000/myapp/userdetails/?userIdKey={{tmpString}}">
 		</iron-ajax>
 		<iron-ajax
 			id = "registerAjax"
@@ -153,6 +153,8 @@ Login and Register Code
 			method="POST"
 			content-type="application/x-www-form-urlencoded"
 			body="{{userDetailData}}"
+			on-response="_handleCreateUserDetail"
+			last-response="{{responseData}}"
     		url="http://127.0.0.1:8000/myapp/userdetails/">
 		</iron-ajax>
 		<iron-ajax
@@ -219,10 +221,8 @@ Polymer({
 			value: function() { return {}; }	
 		},
 		
-		loading: {
-			type: Boolean,
-			notify: true,
-			value: false
+		tmpString: {
+			type: String
 		}
 
 	},
@@ -237,6 +237,7 @@ Polymer({
 		console.log("user", document.querySelector('#global').userPK);
 		console.log("uni", document.querySelector('#global').universityPK);
 		console.log("type", document.querySelector('#global').userType);
+		console.log("app", document.querySelector('#app').isStudent);
      },
 	 
 	 universityListOn: function(){
@@ -258,13 +259,15 @@ Polymer({
 	 },
 	 
 	 _handleLoginResponse: function() {
-		document.querySelector('#global').userPK = this.responseData.id;
+		this.tmpString = this.responseData.results[0].id;
+		document.querySelector('#global').userPK = this.tmpString;
 		this.$.fetchUserDetailAjax.generateRequest();
 	 },
 	 
 	 _handleFetchResponse: function() {
-		document.querySelector('#global').universityPK = this.responseData.universityKey;
-		document.querySelector('#global').userType = this.responseData.userType;
+		document.querySelector('#global').universityPK = this.responseData.results[0].universityKey;
+		document.querySelector('#global').userType = this.responseData.results[0].userType;
+		document.querySelector('#global').startUi();
 	 },
 	 
 	 _register: function(){
@@ -279,7 +282,6 @@ Polymer({
 	_handleCreateUniversity: function() {
 		//handle global admin university
 		document.querySelector('#global').universityPK = this.responseData.universityPK;
-		console.log("uni", document.querySelector('#global').universityPK);
 		this.userDetailData.universityKey = document.querySelector('#global').universityPK
 		this.$.registerAjax.generateRequest();
 	},
@@ -294,6 +296,11 @@ Polymer({
 		document.querySelector('#global').userPK = this.responseData.id;
 		this.userDetailData.userIdKey = document.querySelector('#global').userPK
 		this.$.createUserDetailAjax.generateRequest();
+	  },
+	  
+	  _handleCreateUserDetail: function(){
+		  console.log("response", this.responseData);
+		  document.querySelector('#global').startUi();
 	  }
 });
 </script>
