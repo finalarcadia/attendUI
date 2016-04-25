@@ -43,9 +43,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			Class Id:
 			<paper-input id="large" label="AAA 1111 U01" value="{{classData.classId}}" no-label-float></paper-input>
 			<br>
-			Class name:
-			<paper-input id="large" label="Full Name" value="{{classData.name}}" no-label-float></paper-input>
-			<br>
 			Class time:
 			<paper-input id="small" label="hh:mm:ss" value="{{classData.startTime}}" no-label-float></paper-input>
 			-
@@ -65,7 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		</iron-ajax>
 		<div class="buttons">
 			<paper-button dialog-dismiss>Cancel</paper-button>
-			<paper-button on-click="startAjax" dialog-confirm>Create</paper-button>
+			<paper-button on-click="_createClass" dialog-confirm>Create</paper-button>
 		</div>
 	</paper-dialog>
 
@@ -90,14 +87,9 @@ Polymer({
 
 	},
 	
-	makeheaders: function(user, pass){
-        var obj = {};
-        obj.Authorization = "Basic " + btoa("final" + ":" + "evolution2");
-        return obj;  
-    },
-	
-	startAjax: function(){
-		this.classData.universityKey = "1";
+	_createClass: function(){
+		console.log("uni", document.querySelector('#global').universityPK);
+		this.classData.universityKey = document.querySelector('#global').universityPK;
 		this.$.createClassAjax.generateRequest();
 	},
 	

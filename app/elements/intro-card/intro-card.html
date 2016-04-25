@@ -123,16 +123,11 @@ Login and Register Code
 		<iron-icon icon="folder-shared"></iron-icon>
 		<paper-input label="Id" value="{{userDetailData.schoolId}}" no-label-float></paper-input>
 		<paper-button on-click="_register">Register</paper-button>
-		
-		<template is="dom-if" if="{{loading}}">
-			<h1>LOADING</h1>
-		</template>
 		<iron-ajax
 			id = "loginAjax"
 			method="GET"
 			handle-as="json"
-			loading="{{loading}}"
-			on-loading-changed="_onLoadingChangedL1"
+			on-response="_handleLoginResponse"
 			last-response="{{responseData}}"
     		url="http://127.0.0.1:8000/myapp/auth/{{username}}/{{password}}/">
 		</iron-ajax>
@@ -140,8 +135,7 @@ Login and Register Code
 			id = "fetchUserDetailAjax"
 			method="GET"
 			handle-as="json"
-			loading="{{loading}}"
-			on-loading-changed="_onLoadingChangedL2"
+			on-response="_handleFetchResponse"
 			last-response="{{responseData}}"
     		url="http://127.0.0.1:8000/myapp/userdetails/{{responseData.id}}/">
 		</iron-ajax>
@@ -150,8 +144,7 @@ Login and Register Code
 			method="POST"
 			content-type="application/x-www-form-urlencoded"
 			body="{{userData}}"
-			loading="{{loading}}"
-			on-loading-changed="_onLoadingChangedR"
+			on-response="_handleRegisterResponse"
 			last-response="{{responseData}}"
     		url="http://127.0.0.1:8000/myapp/users/">
 		</iron-ajax>
@@ -163,13 +156,13 @@ Login and Register Code
     		url="http://127.0.0.1:8000/myapp/userdetails/">
 		</iron-ajax>
 		<iron-ajax
-			id = "createUniversitylAjax"
+			id = "createUniversityAjax"
 			method="POST"
 			content-type="application/x-www-form-urlencoded"
 			body="{{universityData}}"
-			loading="{{loading}}"
-			on-loading-changed="_onLoadingChangedRS"
-    		url="http://127.0.0.1:8000/myapp/userdetails/">
+			on-response="_handleCreateUniversity"
+			last-response="{{responseData}}"
+    		url="http://127.0.0.1:8000/myapp/universities/">
 		</iron-ajax>
 		
 </paper-material>
@@ -264,41 +257,44 @@ Polymer({
 		 this.$.loginAjax.generateRequest();
 	 },
 	 
+	 _handleLoginResponse: function() {
+		document.querySelector('#global').userPK = this.responseData.id;
+		this.$.fetchUserDetailAjax.generateRequest();
+	 },
+	 
+	 _handleFetchResponse: function() {
+		document.querySelector('#global').universityPK = this.responseData.universityKey;
+		document.querySelector('#global').userType = this.responseData.userType;
+	 },
+	 
 	 _register: function(){
+		 //handle userType
+		document.querySelector('#global').userType = this.userDetailData.userType;
+		if (this.userDetailData.userType == "admin")
+			this.$.createUniversityAjax.generateRequest()
+		else
+			this.$.registerAjax.generateRequest();
+	},
+	
+	_handleCreateUniversity: function() {
+		//handle global admin university
+		document.querySelector('#global').universityPK = this.responseData.universityPK;
+		console.log("uni", document.querySelector('#global').universityPK);
+		this.userDetailData.universityKey = document.querySelector('#global').universityPK
 		this.$.registerAjax.generateRequest();
 	},
 	
-	_onLoadingChangedR: function(){
-		if (this.loading == true){
-			//Set up global values
-			document.querySelector('#global').userPK = this.responseData.id;
+	_handleRegisterResponse: function(){
+		//handle global other user's university
+		if (document.querySelector('#global').userType != "admin"){
 			document.querySelector('#global').universityPK = this.universitySelection.firstElementChild.pk;
-			document.querySelector('#global').userType = this.userDetailData.userType;
-			//Populate user detail data
-			//university
-			this.userDetailData.universityKey = this.universitySelection.firstElementChild.pk;
-			//userId
-			this.userDetailData.userIdKey = document.querySelector('#global').userPK
-			this.$.createUserDetailAjax.generateRequest();
+			this.userDetailData.universityKey = document.querySelector('#global').universityPK
 		}
-	  },
-	  
-	  _onLoadingChangedL1: function(){
-		if (this.loading == true){
-			//Set up global values
-			document.querySelector('#global').userPK = this.responseData.id;
-			this.$.fetchUserDetailAjax.generateRequest();
-		}
-	  },
-	  
-	  _onLoadingChangedL2: function(){
-		if (this.loading == false){
-			//Set up global values
-			document.querySelector('#global').universityPK = this.responseData.universityKey;
-			document.querySelector('#global').userType = this.responseData.userType;
-		}
-	  },
-	
+		//handle global user PK
+		document.querySelector('#global').userPK = this.responseData.id;
+		this.userDetailData.userIdKey = document.querySelector('#global').userPK
+		this.$.createUserDetailAjax.generateRequest();
+	  }
 });
 </script>
 </dom-module>
