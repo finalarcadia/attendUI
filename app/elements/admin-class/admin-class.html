@@ -53,16 +53,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<!-- header -->
 		<div class="card-content">
 			<iron-icon icon="maps:local-library"></iron-icon>
-			{{className}}{{uniPk}}{{classPk}}
+			{{className}}
 		</div>
 
 		<!-- middle -->
 		<div class="card-actions">
 
-			<general-card element-color="{{elementColor}}" text="John Smith" icon="face"></general-card>
 			<!--Add user to class-->
 			<paper-dropdown-menu label="Select user to add">
-				<paper-listbox class="dropdown-content" selected-item="{{userData}}">
+				<paper-listbox class="dropdown-content" selected-item="{{userSelection}}">
 					<!-- Class List-->
 						<template is="dom-repeat" items="{{userDropdownData.results}}">
 							<paper-item>
@@ -71,34 +70,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						</template>
 				</paper-listbox>
 			</paper-dropdown-menu>
-			
-			
-			<paper-button><iron-icon icon="check"></iron-icon>Add</paper-button>
+			<paper-button on-click="_addToRoster"><iron-icon icon="check"></iron-icon>Add</paper-button>
 
 			<!--Dropdown icon-->
 			<paper-icon-button icon="hardware:keyboard-arrow-up" title="settings" onclick="_toggle()"
 			style="float:right;">
 		</paper-icon-button>
-		<script>
-		function _toggle() {
-			var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
-			var iconButton = Polymer.dom(event).localTarget;
-			iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
-			: 'hardware:keyboard-arrow-down';
-			moreInfo.toggle();
-		}
-		</script>
 
+		<!--<template is="dom-if" if="{{dropdownBool}}">-->
 		<!--Dropdown content-->
 		<iron-collapse id="dropdown" style="width:100%;">
 			<!-- Request Cards-->
-			<user-card element-color="{{elementColor}}" person-name="Massoud Milani" is-professor></user-card>
-			<user-card element-color="{{elementColor}}" person-name="Gabriel Fernandez" is-student></user-card>
-			<user-card element-color="{{elementColor}}" person-name="Jonathan Jensen" is-student></user-card>
+			<template is="dom-repeat" items="{{adminClassList.results}}">
+				<user-card element-color="{{elementColor}}" person-name$="{{item.first_name}}" pk$="{{item.id}}" is-student></user-card>
+    		</template>
 			<!-- End Request Cards-->
 			<paper-fab onclick="_toggleDialog('#deleteClassDialog')" mini icon="close"></paper-fab>
 			<br><br><br>
 		</iron-collapse>
+		<!--</template>-->
 	</div>
 </paper-card>
 
@@ -108,24 +98,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		handle-as="json"
 		last-response="{{userDropdownData}}"
         on-response="_handleUserDropdownData"
-		url="http://127.0.0.1:8000/myapp/userdetails/?universityKey={{uniPk}}">
+		url="http://127.0.0.1:8000/myapp/usersfromuniversity/{{uniPk}}/">
 	</iron-ajax>
 	<iron-ajax
-			id = "manualAddRosterAjax"
-			method="POST"
-			content-type="application/x-www-form-urlencoded"
-			body="{{rosterData}}"
-			on-response="_handleRegisterResponse"
-			last-response="{{responseData}}"
-    		url="http://127.0.0.1:8000/myapp/users/">
-		</iron-ajax>
+		id = "manualAddRosterAjax"
+		method="POST"
+		content-type="application/x-www-form-urlencoded"
+		body="{{rosterData}}"
+		on-response="_handleManualAddResponse"
+		last-response="{{responseData}}"
+		url="http://127.0.0.1:8000/myapp/roster/">
+	</iron-ajax>
 	<iron-ajax
 		id = "adminClassListAjax"
 		method="GET"
 		handle-as="json"
-		last-response="{{adminClassListData}}"
-        on-response="getInfo"
-		url="http://127.0.0.1:8000/myapp/users/?universityKey={{uniPk}}">
+		last-response="{{adminClassList}}"
+        on-response="_handleAdminClassListResponse"
+		url="http://127.0.0.1:8000/myapp/usersfromclass/{{classPk}}/">
 	</iron-ajax>
 
 </template>
@@ -157,7 +147,12 @@ Polymer({
 			value: 'null'
 		},
 		
-		userData: {
+		dropdownBool: {
+			type: Boolean,
+			value: false
+		},
+		
+		userSelection: {
 			type: Object,
 			value: function() { return {}; }	
 		},
@@ -172,7 +167,12 @@ Polymer({
 			value: function() { return {}; }	
 		},
 		
-		adminClassListData: {
+		adminClassList: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		responseData: {
 			type: Object,
 			value: function() { return {}; }	
 		}
@@ -186,13 +186,44 @@ Polymer({
 		this.$.userDropdownAjax.generateRequest();
 	},
 	
+	_toggle: function() {
+		var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
+		var iconButton = Polymer.dom(event).localTarget;
+		iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+		: 'hardware:keyboard-arrow-down';
+		moreInfo.toggle();
+	}
+	,
+	
+	_addToRoster: function() {
+		console.log("the selection is", this.userSelection.firstElementChild.pk);
+		this.rosterData.userIdKey = this.userSelection.firstElementChild.pk;
+		this.rosterData.classIdKey = this.classPk;
+		console.log("the roster is", this.rosterData);
+		this.$.manualAddRosterAjax.generateRequest();
+		this.$.adminClassListAjax.generateRequest();
+	},
+	
+	//TODO: CALL THIS FROM DROPDOWN BUTTON
+	_getClassList: function() {
+	},
+	
+	_handleManualAddResponse: function() {
+		console.log("the response is", this.responseData);
+	},
+	
 	_handleUserDropdownData: function() {
-		console.log("data", this.userDropdownData);
+		
+	},
+	
+	_handleAdminClassListResponse: function() {
+		console.log("the userlist is", this.responseData);
+		//this.dropdownBool = true;
 	},
      
-     getInfo: function(){
-         console.log("the response is", this.classList);
-     }
+	getInfo: function(){
+		 
+	}
 });
 </script>
 </dom-module>
