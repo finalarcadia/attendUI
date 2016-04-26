@@ -80,14 +80,15 @@ Login and Register Code
 		<br>
 		
 		<!-- Admin university -->
-		<div id="adminUniversity" style="visibility: hidden;">
+		<template is="dom-if" if="{{boolOff}}">
 		<iron-icon icon="social:school"></iron-icon>
-		<paper-input id="large" label="University" value="{{universityData.universityName}}" no-label-float></paper-input>
+		<paper-input id="large" label="Create University" value="{{universityData.universityName}}" no-label-float></paper-input>
 		<br>
-		</div>
+		</template>
+		
 
 		<!-- Regular University -->
-		<div id="regularUniversity" style="visibility: hidden;">
+		<template is="dom-if" if="{{boolOn}}">
 		<iron-icon icon="social:school"></iron-icon>
 		<iron-ajax
 			auto
@@ -108,9 +109,7 @@ Login and Register Code
 			</paper-listbox>
 		</paper-dropdown-menu>
 		<br>
-		</div>
-
-		<paper-button on-click="getInfo">INFO</paper-button>
+		</template>
 		
 		<iron-icon icon="perm-identity"></iron-icon>
 		<paper-input label="Username" value="{{userData.username}}" no-label-float></paper-input>
@@ -223,6 +222,14 @@ Polymer({
 		
 		tmpString: {
 			type: String
+		},
+		
+		boolOn: {
+			type: Boolean,
+		},
+		
+		boolOff: {
+			type: Boolean,
 		}
 
 	},
@@ -241,17 +248,13 @@ Polymer({
      },
 	 
 	 universityListOn: function(){
-		 this.$.regularUniversity.style.visibility='visible';
-		 this.$.adminUniversity.style.visibility='hidden';
-		 //Polymer.dom(this.$.paperParent).appendChild(this.$.regularUniversity);
-		 //Polymer.dom(this.$.paperParent).removeChild(this.$.adminUniversity);
+		 this.boolOn = true;
+		 this.boolOff = false;
 	 },
 	 
 	 universityListOff: function(){
-		 this.$.adminUniversity.style.visibility='visible';
-		 this.$.regularUniversity.style.visibility='hidden';
-		 //Polymer.dom(this.$.paperParent).appendChild(this.$.adminUniversity);
-		 //Polymer.dom(this.$.paperParent).removeChild(this.$.regularUniversity);
+		 this.boolOn = false;
+		 this.boolOff = true;
 	 },
 	 
 	 _login: function(){

@@ -1,34 +1,33 @@
 <dom-module id="get-student-data">
   <template>
     <iron-ajax
-        auto
-        id="studentAjax"
+        id = "studentPopulateAjax"
         method="GET"
         handle-as="json"
         last-response="{{studentData}}"
-        url="http://127.0.0.1:8000/myapp/classes">
-    </iron-ajax>
+        url="http://127.0.0.1:8000/myapp/classesfromuser/{{pk}}/">
+	  </iron-ajax>
     <template is="dom-repeat" items="{{studentData.results}}">
-        <student-class class-name$="{{item.classId}}"></student-class>
+        <student-class element-color="var(--paper-blue-500)" class-name$="{{item.classId}}" class-pk$="{{item.classPK}}" location-req$="{{item.locationFlag}}" code-req$="{{item.codeFlag}}"></student-class>
     </template>
   </template>
 
   <script>
     Polymer({
 
-    is: 'get-student-data',
-     
-    properties: {
+          is: 'get-student-data',
+          
+          properties: {
 
-		studentData: {
-			type: Object,
-		}
+          studentData: {
+            type: Object,
+          }
+      },
 
-	   },
-     
-     getInfo: function(){
-         console.log("the response is", this.studentData);
-     }
+      ready: function() {
+        this.pk = document.querySelector('#global').userPK;
+        this.$.studentPopulateAjax.generateRequest();
+      },
 
    });
   </script>

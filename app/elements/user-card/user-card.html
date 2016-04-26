@@ -38,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				{{personName}}
 			</div>
 			<span style="float:right;">
-				<paper-icon-button onclick="_toggleDialog('#removeUserDialog')" icon="clear" title="remove"></paper-icon-button>
+				<paper-icon-button on-click="_callDialog" icon="clear" title="remove"></paper-icon-button>
 			</span>
 		</div>
 	</paper-card>
@@ -61,7 +61,11 @@ Polymer({
 			value: 'noPersonNameGiven',
 		},
 		
-		pk: {
+		userPk: {
+			type: String
+		},
+		
+		classPk: {
 			type: String
 		},
 
@@ -80,11 +84,15 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
+	},
+	
+	_callDialog: function() {
+		//var popups = document.querySelector('#popuplist');
+		//popups.userPk = this.userPk;
+		//popups.classPk = this.classPk;
+		//popups.getInfo();
+		console.log("tmpstr: ", Polymer.dom(this.root));
 	}
 });
-
-function _toggleDialog(dialogId) {
-	document.querySelector(dialogId).toggle();
-}
 </script>
 </dom-module>

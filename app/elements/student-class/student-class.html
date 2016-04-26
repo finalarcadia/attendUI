@@ -74,30 +74,76 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<div class="card-actions">
 
 			<paper-input label="Enter code" hidden$="{{!codeReq}}" no-label-float></paper-input>
-			<paper-button onclick="_toggleDialog(recordDialog)"><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
+			<paper-button on-click="recordAttendance"><iron-icon icon="image:edit"></iron-icon>Record</paper-button>
 
-			<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" onclick="_toggle()"
+			<paper-icon-button icon="hardware:keyboard-arrow-up" title="more info" on-click="_toggle"
 			style="float: right;"></paper-icon-button>
-			<script>
-			function _toggle() {
-				var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
-				var iconButton = Polymer.dom(event).localTarget;
-				iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
-				: 'hardware:keyboard-arrow-down';
-				moreInfo.toggle();
-			}
-			</script>
 
 			<!-- Dropdown Content -->
 
 			<iron-collapse id="dropdown">
-				<student-bar late="20" present="60" attempt="5" absent="15"></student-bar>
+				<student-bar late="{{late}}" present="{{present}}" attempt="{{attempt}}" absent="{{absent}}"></student-bar>
 				<br>
-				<span id="score">Score: {{score}}%</span>
+				<span id="score">Attendance: {{total}}%</span>
 				<paper-fab mini icon="close" onclick="_toggleDialog('#dropClassDialog')"></paper-fab>
 			</iron-collapse>
 		</div>
 	</paper-card>
+	
+	<iron-ajax
+		id = "recordAjax"
+		method="POST"
+		content-type="application/x-www-form-urlencoded"
+		body="{{attendanceData}}"
+		last-response="{{responseData}}"
+        on-response="_recordResponse"
+		url="http://127.0.0.1:8000/myapp/attendance/">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "lateAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_lateResponse"
+		url="http://127.0.0.1:8000/myapp/attendance/?userIdKey={{userPk}}&classkey={{classPk}}&mark=late">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "presentAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_presentResponse"
+		url="http://127.0.0.1:8000/myapp/attendance/?userIdKey={{userPk}}&classkey={{classPk}}&mark=present">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "attemptAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_attemptResponse"
+		url="http://127.0.0.1:8000/myapp/attendance/?userIdKey={{userPk}}&classkey={{classPk}}&mark=attempt">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "absentAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_absentResponse"
+		url="http://127.0.0.1:8000/myapp/attendance/?userIdKey={{userPk}}&classkey={{classPk}}&mark=absent">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "totalAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_totalResponse"
+		url="http://127.0.0.1:8000/myapp/attendance/?userIdKey={{userPk}}&classkey={{classPk}}">
+	</iron-ajax>
 
 </template>
 
@@ -117,6 +163,14 @@ Polymer({
 			type: String,
 			value: 'noClassNameGiven',
 		},
+		
+		userPk: {
+			type: String
+		},
+		
+		classPk: {
+			type: String
+		},
 
 		locationReq: {
 			type: Boolean,
@@ -127,10 +181,39 @@ Polymer({
 			type: Boolean,
 			value: false,
 		},
+		
+		responseData: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		attendanceData: {
+			type: Object,
+			value: function() { return {}; }	
+		},
 
-		score: {
-			type: String,
-			value: '75',
+		total: {
+			type: Number
+		},
+		
+		late: {
+			type: Number
+		},
+		
+		present: {
+			type: Number
+		},
+		
+		attempt: {
+			type: Number
+		},
+		
+		absent: {
+			type: Number
+		},
+		
+		bool: {
+			type: Boolean
 		}
 
 	},
@@ -138,13 +221,72 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
+		this.userPk = document.querySelector('#global').userPK;
+		this.refreshAttendance();
+	},
+	
+	refreshAttendance: function() {
+		//this.bool = false;
+		this.$.lateAjax.generateRequest();
+	},
+	
+	_toggle: function() {
+		var moreInfo = this.$.dropdown;
+		var iconButton = Polymer.dom(event).localTarget;
+		iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+		: 'hardware:keyboard-arrow-down';
+		moreInfo.toggle();
+	},
+	
+	// Returns a random integer between min (included) and max (included)
+	// Using Math.round() will give you a non-uniform distribution!
+	getRandomIntInclusive: function (min, max) {
+  		return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
+	
+	recordAttendance: function() {
+		var vals = ["late", "present", "attempt", "absent"];
+		this.attendanceData.mark = vals[this.getRandomIntInclusive(0,3)];
+		console.log("mark", this.attendanceData.mark);
+		this.attendanceData.classkey = this.classPk;
+		this.attendanceData.userIdKey = this.userPk;
+		this.$.recordAjax.generateRequest();
+	},
+	
+	_recordResponse: function() {
+		this.refreshAttendance();
+	},
+	
+	_lateResponse: function() {
+		this.late = this.responseData.count;
+		this.$.presentAjax.generateRequest();
+	},
+	
+	_presentResponse: function() {
+		this.present = this.responseData.count;
+		this.$.attemptAjax.generateRequest();
+	},
+	
+	_attemptResponse: function() {
+		this.attempt = this.responseData.count;
+		this.$.absentAjax.generateRequest();
+	},
+	
+	_absentResponse: function() {
+		this.absent = this.responseData.count;
+		this.$.totalAjax.generateRequest();
+	},
+	
+	_totalResponse: function() {
+		this.total = this.responseData.count;
+		this.late = Math.floor(this.late / this.total * 100);
+		this.present = Math.floor(this.present / this.total * 100);
+		this.attempt = Math.floor(this.attempt / this.total * 100);
+		this.absent = Math.floor(this.absent / this.total * 100);
+		this.total = this.late + this.present + this.attempt;
+		//this.bool = true;
 	}
+	
 });
-
-var recordDialog = '#presentDialog';
-
-function _toggleDialog(dialogId) {
-	document.querySelector(dialogId).toggle();
-}
 </script>
 </dom-module>

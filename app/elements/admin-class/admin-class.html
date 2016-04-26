@@ -73,22 +73,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			<paper-button on-click="_addToRoster"><iron-icon icon="check"></iron-icon>Add</paper-button>
 
 			<!--Dropdown icon-->
-			<paper-icon-button icon="hardware:keyboard-arrow-up" title="settings" onclick="_toggle()"
+			<paper-icon-button icon="hardware:keyboard-arrow-up" title="settings" on-click="_toggle"
 			style="float:right;">
 		</paper-icon-button>
 
-		<!--<template is="dom-if" if="{{dropdownBool}}">-->
+		
 		<!--Dropdown content-->
 		<iron-collapse id="dropdown" style="width:100%;">
+			<template is="dom-if" if="{{dropdownBool}}">
 			<!-- Request Cards-->
 			<template is="dom-repeat" items="{{adminClassList.results}}">
-				<user-card element-color="{{elementColor}}" person-name$="{{item.first_name}}" pk$="{{item.id}}" is-student></user-card>
+				<user-card element-color="{{elementColor}}" person-name$="{{item.first_name}}" user-pk$="{{item.id}}" class-pk$="{{classPk}}" is-student></user-card>
     		</template>
 			<!-- End Request Cards-->
 			<paper-fab onclick="_toggleDialog('#deleteClassDialog')" mini icon="close"></paper-fab>
 			<br><br><br>
+			</template>
 		</iron-collapse>
-		<!--</template>-->
+		
 	</div>
 </paper-card>
 
@@ -97,7 +99,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		method="GET"
 		handle-as="json"
 		last-response="{{userDropdownData}}"
-        on-response="_handleUserDropdownData"
+        on-response="_handleUserDropdownDataResponse"
 		url="http://127.0.0.1:8000/myapp/usersfromuniversity/{{uniPk}}/">
 	</iron-ajax>
 	<iron-ajax
@@ -184,24 +186,27 @@ Polymer({
 		this.updateStyles();
 		this.uniPk = document.querySelector('#global').universityPK;
 		this.$.userDropdownAjax.generateRequest();
+		this.$.adminClassListAjax.generateRequest();
+	},
+	
+	refreshList: function() {
+		//repopulate class list
+		this.dropdownBool = false;
+		this.$.adminClassListAjax.generateRequest();
 	},
 	
 	_toggle: function() {
-		var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
+		var moreInfo = this.$.dropdown;
 		var iconButton = Polymer.dom(event).localTarget;
 		iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
 		: 'hardware:keyboard-arrow-down';
 		moreInfo.toggle();
-	}
-	,
+	},
 	
 	_addToRoster: function() {
-		console.log("the selection is", this.userSelection.firstElementChild.pk);
 		this.rosterData.userIdKey = this.userSelection.firstElementChild.pk;
 		this.rosterData.classIdKey = this.classPk;
-		console.log("the roster is", this.rosterData);
 		this.$.manualAddRosterAjax.generateRequest();
-		this.$.adminClassListAjax.generateRequest();
 	},
 	
 	//TODO: CALL THIS FROM DROPDOWN BUTTON
@@ -209,16 +214,16 @@ Polymer({
 	},
 	
 	_handleManualAddResponse: function() {
-		console.log("the response is", this.responseData);
+		//repopulate class list
+		this.refreshList();
 	},
 	
-	_handleUserDropdownData: function() {
+	_handleUserDropdownDataResponse: function() {
 		
 	},
 	
 	_handleAdminClassListResponse: function() {
-		console.log("the userlist is", this.responseData);
-		//this.dropdownBool = true;
+		this.dropdownBool = true;
 	},
      
 	getInfo: function(){

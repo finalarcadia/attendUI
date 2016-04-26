@@ -29,19 +29,31 @@
         
         startUi: function() {
             if (this.userType == "student"){
+                document.querySelector('#app').isLogged = false;
+                document.querySelector('#app').isStudent = false;
+                document.querySelector('#app').isLogged = true;
                 document.querySelector('#app').isStudent = true;
                 document.querySelector('#app').isProfessor = false;
                 document.querySelector('#app').isAdmin = false;
+                page('/student');
             }
             else if (this.userType == "professor"){
+                document.querySelector('#app').isLogged = false;
+                document.querySelector('#app').isProfessor = false;
+                document.querySelector('#app').isLogged = true;
                 document.querySelector('#app').isProfessor = true;
                 document.querySelector('#app').isStudent = false;
                 document.querySelector('#app').isAdmin = false;
+                page('/professor');
             }
             else if (this.userType == "admin"){
+                document.querySelector('#app').isLogged = false;
+                document.querySelector('#app').isAdmin = false;
+                document.querySelector('#app').isLogged = true;
                 document.querySelector('#app').isAdmin = true;
                 document.querySelector('#app').isStudent = false;
                 document.querySelector('#app').isProfessor = false;
+                page('/admin');
                 
             }
 	    }

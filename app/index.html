@@ -64,19 +64,23 @@
 				<paper-toolbar id="drawerToolbar">
 					<span class="menu-name" style="width: 100%;">
 
+						<template is="dom-if" if="{{isLogged}}">
 						<!--- Begin user account panel --->
 						<account-panel></account-panel>
 						<!--- End user account panel --->
+						</template>
 
 					</span>
 				</paper-toolbar>
 
 				<!-- Drawer Content -->
 				<paper-menu attr-for-selected="data-route" selected="[[route]]">
+					<template is="dom-if" if="{{!isLogged}}">
 					<a data-route="index" href="{{baseUrl}}">
 						<iron-icon icon="donut-large"></iron-icon>
 						<span>Welcome</span>
 					</a>
+					</template>
 					
 					<template is="dom-if" if="{{isStudent}}">
 					<a data-route="student" href="{{baseUrl}}student">
@@ -142,24 +146,27 @@
 		<div class="content">
 
 			<!--Pop ups-->
-			<popup-list></popup-list>
+			<popup-list id="popuplist"></popup-list>
 
 			<iron-pages attr-for-selected="data-route" selected="{{route}}">
 
 				<!-- Begin Welcome Page-->
+				<template is="dom-if" if="{{!isLogged}}">
 				<section data-route="index">
 					<intro-card></intro-card>
 				</section>
+				</template>
 				<!-- End Welcome Page-->
 
 				<!-- Begin Student Page-->
 				<template is="dom-if" if="{{isStudent}}">
 				<section data-route="student">
 					
+					<get-student-data id="studentdata"></get-student-data>
+					
 					<span id="myHeader">My Classes</span>
 					
 					<!-- Student Class Card Example-->
-					<student-class element-color="var(--paper-teal-500)" class-name="Software Engineering" location-req code-req score="85"></student-class>
 					
 				</section>
 				</template>
@@ -168,6 +175,8 @@
 				<!-- Begin Professor Page-->
 				<template is="dom-if" if="{{isProfessor}}">
 				<section data-route="professor">
+					
+					<get-professor-data id="professordata"></get-professor-data>
 
 					<span id="myHeader">Roster Notifications</span>
 					<br><br>
@@ -181,11 +190,7 @@
 					<br><br>
 
 					<!-- Professor class Card-->
-					<professor-class element-color="var(--paper-blue-500)" class-name="COP 4660 U01" location-req code-req></professor-class>
-					<!-- End Professor class Card-->
-					<br><br>
-					<!-- Professor class Card-->
-					<professor-class class-name="NET 1234 U02" location-req></professor-class>
+					
 					<!-- End Professor class Card-->
 
 				</section>
@@ -193,6 +198,8 @@
 
 				<!-- Begin Attendance Page-->
 				<section data-route="attendance">
+					
+					<get-attendance-data id="attendance"></get-attendance-data>
 
 					<span id="myHeader">Attempt Notifications</span>
 					<br><br>
@@ -204,7 +211,7 @@
 					<br><br>
 
 					<!-- Begin Attendance Cards-->
-					<attendance-card element-color="var(--paper-orange-500)" class-name="COP 2431 U05"></attendance-card>
+					
 					<!-- End Attendance Cards-->
 
 				</section>
@@ -215,7 +222,7 @@
 				<template is="dom-if" if="{{isAdmin}}">
 				<section data-route="admin">
 					
-					<get-admin-data></get-admin-data>
+					<get-admin-data id="admindata"></get-admin-data>
 
 					<span id="myHeader">Requests</span>
 					<br><br>
@@ -232,16 +239,6 @@
 
 					<br><br>
 					<span id="myHeader">Classes</span>
-					<br><br>
-
-					<!-- Admin class Cards-->
-					<admin-class element-color="var(--paper-green-500)" class-name="COP 2431 U05"></admin-class>
-					<br><br>
-					<admin-class class-name="COP 4660 U01"></admin-class>
-					<br><br>
-					<admin-class element-color="var(--paper-amber-500)" class-name="COP 3245 U03"></admin-class>
-					<br><br>
-					<!-- End Admin class Cards-->
 
 				</section>
 				</template>
@@ -267,6 +264,7 @@
     app.isStudent = false;
 	app.isProfessor = false;
 	app.isAdmin = false;
+	app.isLogged = false;
 	
   });
 </script>

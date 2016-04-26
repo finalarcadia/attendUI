@@ -1,21 +1,21 @@
-<dom-module id="get-admin-data">
+<dom-module id="get-attendance-data">
   <template>
     <iron-ajax
-		id = "adminPopulateAjax"
+		id = "attendancePopulateAjax"
 		method="GET"
 		handle-as="json"
 		last-response="{{classList}}"
-		url="http://127.0.0.1:8000/myapp/classes/?universityKey={{pk}}">
+		url="http://127.0.0.1:8000/myapp/classesfromuser/{{pk}}/">
 	</iron-ajax>
     <template is="dom-repeat" items="{{classList.results}}">
-        <admin-class class-name$="{{item.classId}}" class-pk$="{{item.classPK}}"></admin-class>
+        <attendance-card element-color="var(--paper-orange-500)" class-name$="{{item.classId}}" class-pk$="{{item.classPK}}"></attendance-card>
     </template>
   </template>
 
   <script>
     Polymer({
 
-    is: 'get-admin-data',
+    is: 'get-attendance-data',
      
     properties: {
 		
@@ -31,8 +31,8 @@
 	   },
        
     ready: function() {
-		this.pk = document.querySelector('#global').universityPK;
-		this.$.adminPopulateAjax.generateRequest();
+		this.pk = document.querySelector('#global').userPK;
+		this.$.attendancePopulateAjax.generateRequest();
 	},
      
      getInfo: function(){

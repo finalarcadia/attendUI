@@ -73,49 +73,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			<span id="codeClass" hidden$="{{!codeReq}}">
 				8324
 			</span>
-			<paper-icon-button icon="hardware:keyboard-arrow-up" title="settings" onclick="_toggle()"
+			<paper-icon-button icon="hardware:keyboard-arrow-up" title="settings" on-click="_toggle"
 			style="float:right;">
 		</paper-icon-button>
-
-		<script>
-		function _toggle() {
-			var moreInfo = event.currentTarget.parentElement.querySelector('iron-collapse');
-			var iconButton = Polymer.dom(event).localTarget;
-			iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
-			: 'hardware:keyboard-arrow-down';
-			moreInfo.toggle();
-		}
-		</script>
 
 		<iron-collapse id="dropdown" style="width:100%;">
 
 			<iron-icon icon="device:access-time"></iron-icon>
 			<br>
 			Late threshold:
-			<paper-input label="minutes" hidden$="{{!codeReq}}" no-label-float></paper-input>
-			<paper-icon-button onclick="_toggleToast('#thresholdToast')" icon="check" title="accept"></paper-icon-button>
+			<paper-input label="minutes" value="{{lateInput}}" no-label-float></paper-input>
+			<paper-icon-button on-click="_lateThreshold"" icon="check" title="accept"></paper-icon-button>
 			<br>
 			Absent threshold:
-			<paper-input label="minutes" hidden$="{{!codeReq}}" no-label-float></paper-input>
-			<paper-icon-button onclick="_toggleToast('#thresholdToast')" icon="check" title="accept"></paper-icon-button>
+			<paper-input label="minutes" value="{{absentInput}}" no-label-float></paper-input>
+			<paper-icon-button on-click="_absentThreshold" icon="check" title="accept"></paper-icon-button>
 			<br>
 
 			<iron-icon icon="device:gps-fixed"></iron-icon>
-			<paper-toggle-button style="float:right;" checked></paper-toggle-button>
+			<paper-toggle-button style="float:right;" checked="{{locationReq}}" on-click="_locationFlag"></paper-toggle-button>
 			<br>
 
-			<paper-button onclick="_toggleToast('#locationErrorToast')"><iron-icon icon="maps:pin-drop"></iron-icon>Set location</paper-button>
+			<paper-button on-click="_setLocation"><iron-icon icon="maps:pin-drop"></iron-icon>Set location</paper-button>
 			<br>
 
 			<iron-icon icon="editor:border-color"></iron-icon>
-			<paper-toggle-button style="float:right;" checked></paper-toggle-button>
+			<paper-toggle-button style="float:right;" checked="{{codeReq}}" on-click="_codeFlag"></paper-toggle-button>
 			<br>
 			Code threshold:
-			<paper-input label="seconds" hidden$="{{!codeReq}}" no-label-float></paper-input>
-			<paper-icon-button onclick="_toggleToast('#thresholdToast')" icon="check" title="accept"></paper-icon-button>
+			<paper-input label="minutes" value="{{codeExpirationInput}}" no-label-float></paper-input>
+			<paper-icon-button on-click="_codeExpiration" icon="check" title="accept"></paper-icon-button>
 		</iron-collapse>
 	</div>
 </paper-card>
+
+	<iron-ajax
+		id = "updateClassAjax"
+		method="PATCH"
+		content-type="application/x-www-form-urlencoded"
+		body="{{classData}}"
+		on-response="_handleManualAddResponse"
+		last-response="{{responseData}}"
+		url="http://127.0.0.1:8000/myapp/classes/{{classPk}}/">
+	</iron-ajax>
 
 </template>
 
@@ -135,6 +135,10 @@ Polymer({
 			type: String,
 			value: 'noClassNameGiven',
 		},
+		
+		classPk: {
+			type: String
+		},
 
 		locationReq: {
 			type: Boolean,
@@ -145,25 +149,31 @@ Polymer({
 			type: Boolean,
 			value: false,
 		},
-
-		numTotal: {
-			type: Number,
-			value: 1,
+		
+		classData: {
+			type: Object,
+			value: function() { return {}; }	
 		},
-
-		numPresent: {
-			type: Number,
-			value: 1,
+		
+		responseData: {
+			type: Object,
+			value: function() { return {}; }	
 		},
-
-		numLate: {
-			type: Number,
-			value: 1,
+		
+		lateInput: {
+			type: String
 		},
-
-		numAbsent: {
-			type: Number,
-			value: 1,
+		
+		absentInput: {
+			type: String
+		},
+		
+		codeExpirationInput: {
+			type: String
+		},
+		
+		code: {
+			type: String
 		}
 
 	},
@@ -171,15 +181,65 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
+	},
+	
+	_toggle: function() {
+		var moreInfo = this.$.dropdown;
+		var iconButton = Polymer.dom(event).localTarget;
+		iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+		: 'hardware:keyboard-arrow-down';
+		moreInfo.toggle();
+	},
+	
+	_lateThreshold: function() {
+		if (this.lateInput.length == 1)
+			var tmpString = "0";
+		else
+			var tmpString = "";
+		this.classData = {};
+		this.classData.lateThreshold = "00:" + tmpString + this.lateInput + ":00";
+		this.$.updateClassAjax.generateRequest();
+	},
+	
+	_absentThreshold: function() {
+		if (this.absentInput.length == 1)
+			var tmpString = "0";
+		else
+			var tmpString = "";
+		this.classData = {};
+		this.classData.absentThreshold = "00:" + tmpString + this.absentInput + ":00";
+		this.$.updateClassAjax.generateRequest();
+	},
+	
+	_codeExpiration: function() {
+		if (this.codeExpirationInput.length == 1)
+			var tmpString = "0";
+		else
+			var tmpString = "";
+		this.classData = {};
+		this.classData.codeExpiration = "00:" + tmpString + this.codeExpirationInput + ":00";
+		this.$.updateClassAjax.generateRequest();
+	},
+	
+	_locationFlag: function() {
+		this.classData = {};
+		this.classData.locationFlag = this.locationReq;
+		this.$.updateClassAjax.generateRequest();
+	},
+	
+	_codeFlag: function() {
+		this.classData = {};
+		this.classData.codeFlag = this.codeReq;
+		this.$.updateClassAjax.generateRequest();
+	},
+	
+	_updateClassResponse: function() {
+		
+	},
+	
+	_setLocation: function() {
+		
 	}
 });
-
-function _toggleToast(toastId) {
-	document.querySelector(toastId).toggle();
-}
-
-function _toggleDialog(dialogId) {
-	document.querySelector(dialogId).toggle();
-}
 </script>
 </dom-module>
