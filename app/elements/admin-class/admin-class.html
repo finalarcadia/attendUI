@@ -86,7 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<user-card element-color="{{elementColor}}" person-name$="{{item.first_name}}" user-pk$="{{item.id}}" class-pk$="{{classPk}}" is-student></user-card>
     		</template>
 			<!-- End Request Cards-->
-			<paper-fab onclick="_toggleDialog('#deleteClassDialog')" mini icon="close"></paper-fab>
+			<paper-fab on-click="deleteClass" mini icon="close"></paper-fab>
 			<br><br><br>
 			</template>
 		</iron-collapse>
@@ -118,6 +118,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		last-response="{{adminClassList}}"
         on-response="_handleAdminClassListResponse"
 		url="http://127.0.0.1:8000/myapp/usersfromclass/{{classPk}}/">
+	</iron-ajax>
+	<iron-ajax
+		id = "deleteClassAjax"
+		method="DELETE"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_deleteClassResponse"
+		url="http://127.0.0.1:8000/myapp/classes/{{classPk}}/">
 	</iron-ajax>
 
 </template>
@@ -207,6 +215,17 @@ Polymer({
 		this.rosterData.userIdKey = this.userSelection.firstElementChild.pk;
 		this.rosterData.classIdKey = this.classPk;
 		this.$.manualAddRosterAjax.generateRequest();
+	},
+	
+	deleteClass: function() {
+		this.$.deleteClassAjax.generateRequest();
+	},
+	
+	_deleteClassResponse: function() {
+		this.refreshList();
+		this._toggle();
+		this.customStyle['--my-color'] = "var(--paper-grey-500)";
+		this.updateStyles();
 	},
 	
 	//TODO: CALL THIS FROM DROPDOWN BUTTON

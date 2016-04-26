@@ -81,7 +81,7 @@
 			<!-- Student List Cards-->
 				<template is="dom-repeat" items="{{studentData.results}}">
 					<paper-item>
-					<general-card element-color="{{elementColor}}" text$="{{item.first_name}}" pk$="{{item.id}}" icon="face"></general-card>
+						<general-card element-color="{{elementColor}}" text$="{{item.first_name}}" pk$="{{item.id}}" icon="face"></general-card>
 					</paper-item>
     			</template>
 			<!-- End Student List Cards-->
@@ -90,10 +90,9 @@
 			<paper-icon-button on-click="_changeStudent" icon="check" title="accept"></paper-icon-button>
 						
 						
-			<span id="score">{{total}}%</span>
-			<br><br>
-
-			<student-bar late="{{late}}" present="{{present}}" attempt="{{attempt}}" absent="{{absent}}"></student-bar>
+			
+			
+			
 			
 			<!--
 			<br>
@@ -105,11 +104,25 @@
 			<br>
 			-->
 			
-			<div id="calendarContainer">
-				<div id="calendarItem">
-					<calendar-other content="S"></calendar-other>
+			<template is="dom-if" if="{{dropdownBool}}">
+				<span id="score">{{total}}%</span>
+				<br><br>
+				<student-bar late="{{late}}" present="{{present}}" attempt="{{attempt}}" absent="{{absent}}"></student-bar>
+				<div id="calendarContainer">
+					<template is="dom-repeat" items="{{attendanceData.results}}">
+						<div id="calendarItem">
+							<calendar-fab date-val=$"{{item.date}}" state$="{{item.mark}}" pk$="{{item.attendancePK}}"></calendar-fab>
+						</div>
+					</template>
 				</div>
+			</template>
+			<br>
+				
+					
+				
 			</div>
+			
+			
 		</div>
 		</paper-card>
 			
@@ -231,6 +244,11 @@
 				
 				tmpString: {
 					type: String
+				},
+				
+				dropdownBool: {
+					type: Boolean,
+					value: false
 				}
 
 			},
@@ -247,7 +265,7 @@
 			},
 			
 			refreshAttendance: function() {
-				//this.bool = false;
+				this.dropdownBool = false;
 				this.$.lateAjax.generateRequest();
 			},
 			
@@ -276,6 +294,7 @@
 			
 			_totalResponse: function() {
 				this.attendanceData = this.responseData;
+				this.dropdownBool = true;
 				console.log("das", this.attendanceData);
 				this.total = this.responseData.count;
 				if (this.late != 0)
@@ -287,7 +306,6 @@
 				if (this.absent != 0)
 					this.absent = Math.floor(this.absent / this.total * 100);
 				this.total = this.late + this.present + this.attempt;
-				//this.bool = true;
 			}
 			
 		});

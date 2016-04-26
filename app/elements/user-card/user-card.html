@@ -38,10 +38,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				{{personName}}
 			</div>
 			<span style="float:right;">
-				<paper-icon-button on-click="_callDialog" icon="clear" title="remove"></paper-icon-button>
+				<paper-icon-button on-click="removeUser" icon="clear" title="remove"></paper-icon-button>
 			</span>
 		</div>
 	</paper-card>
+	
+	<iron-ajax
+		id = "getRosterPkAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_getRosterPkResponse"
+		url="http://127.0.0.1:8000/myapp/roster/?classIdKey={{classPk}}&userIdKey={{userPk}}">
+	</iron-ajax>
+	<iron-ajax
+		id = "removeUserAjax"
+		method="DELETE"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_removeUserResponse"
+		url="http://127.0.0.1:8000/myapp/roster/{{tmpString}}/">
+	</iron-ajax>
+	
 </template>
 
 <script>
@@ -77,6 +95,15 @@ Polymer({
 		isStudent: {
 			type: Boolean,
 			value: false
+		},
+		
+		tmpString: {
+			type: String
+		},
+		
+		responseData: {
+			type: Object,
+			value: function() { return {}; }	
 		}
 
 	},
@@ -86,13 +113,28 @@ Polymer({
 		this.updateStyles();
 	},
 	
-	_callDialog: function() {
+	removeUser: function() {
 		//var popups = document.querySelector('#popuplist');
 		//popups.userPk = this.userPk;
 		//popups.classPk = this.classPk;
 		//popups.getInfo();
-		console.log("tmpstr: ", Polymer.dom(this.root));
-	}
+		//console.log("tmpstr: ", Polymer.dom(this.root));
+		this.$.getRosterPkAjax.generateRequest();
+	},
+	
+	_getRosterPkResponse: function() {
+		console.log("tmpstr: ", this.responseData);
+		this.tmpString = this.responseData.results[0].classRosterPK;
+		console.log("tmpstr: ", this.tmpString);
+		this.$.removeUserAjax.generateRequest();
+	},
+	
+	_removeUserResponse: function() {
+		this.customStyle['--my-color'] = "var(--paper-grey-500)";
+		this.updateStyles();
+	},
+	
+	
 });
 </script>
 </dom-module>

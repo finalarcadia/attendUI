@@ -164,10 +164,6 @@
 					
 					<get-student-data id="studentdata"></get-student-data>
 					
-					<span id="myHeader">My Classes</span>
-					
-					<!-- Student Class Card Example-->
-					
 				</section>
 				</template>
 				<!-- End Student Page-->
@@ -175,23 +171,12 @@
 				<!-- Begin Professor Page-->
 				<template is="dom-if" if="{{isProfessor}}">
 				<section data-route="professor">
-					
+					2
 					<get-professor-data id="professordata"></get-professor-data>
-
-					<span id="myHeader">Roster Notifications</span>
-					<br><br>
-
+					<!--
 					<request-card class-name="COP 4660 U01" person-name="Gabriel Fernandez" is-Student></request-card>
 					<drop-notification class-name="COP 4660 U01" person-name="John Smith"></drop-notification>
-					<request-card class-name="COP 4660 U01" person-name="Jonathan Jensen" is-Student></request-card>
-
-					<br><br>
-					<span id="myHeader">My Classes</span>
-					<br><br>
-
-					<!-- Professor class Card-->
-					
-					<!-- End Professor class Card-->
+					-->
 
 				</section>
 				<!-- End Professor Page-->
@@ -200,19 +185,9 @@
 				<section data-route="attendance">
 					
 					<get-attendance-data id="attendance"></get-attendance-data>
-
-					<span id="myHeader">Attempt Notifications</span>
-					<br><br>
-
+					<!--
 					<attempt-notification class-name="COP 2431 U05" person-name="Gabriel Fernandez" date="5/24/16"></attempt-notification>
-
-					<br><br>
-					<span id="myHeader">My Classes' Attendance</span>
-					<br><br>
-
-					<!-- Begin Attendance Cards-->
-					
-					<!-- End Attendance Cards-->
+					-->
 
 				</section>
 				</template>
@@ -223,22 +198,6 @@
 				<section data-route="admin">
 					
 					<get-admin-data id="admindata"></get-admin-data>
-
-					<span id="myHeader">Requests</span>
-					<br><br>
-
-					<!-- Request Card-->
-					<request-card class-name="COP 3245 U03" person-name="Massoud Milani" is-Professor></request-card>
-					<!-- End Request Card-->
-					<!-- Request Card-->
-					<request-card class-name="COP 4660 U01" person-name="Gabriel Fernandez" is-Student></request-card>
-					<!-- End Request Card-->
-					<!-- Request Card-->
-					<request-card class-name="COP 4660 U01" person-name="Jonathan Jensen" is-Student></request-card>
-					<!-- End Request Card-->
-
-					<br><br>
-					<span id="myHeader">Classes</span>
 
 				</section>
 				</template>
