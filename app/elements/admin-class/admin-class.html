@@ -63,7 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			<paper-dropdown-menu label="Select user to add">
 				<paper-listbox class="dropdown-content" selected-item="{{userSelection}}">
 					<!-- Class List-->
-						<template is="dom-repeat" items="{{userDropdownData.results}}">
+						<template is="dom-repeat" items="{{userDropdownData}}">
 							<paper-item>
 								<general-card element-color="{{elementColor}}" text$="{{item.first_name}}" pk$="{{item.id}}" icon="face"></general-card>
 							</paper-item>
@@ -82,7 +82,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<iron-collapse id="dropdown" style="width:100%;">
 			<template is="dom-if" if="{{dropdownBool}}">
 			<!-- Request Cards-->
-			<template is="dom-repeat" items="{{adminClassList.results}}">
+			<template is="dom-repeat" items="{{adminClassList}}">
 				<user-card element-color="{{elementColor}}" person-name$="{{item.first_name}}" user-pk$="{{item.id}}" class-pk$="{{classPk}}" is-student></user-card>
     		</template>
 			<!-- End Request Cards-->

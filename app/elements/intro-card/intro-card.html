@@ -101,7 +101,7 @@ Login and Register Code
 		<paper-dropdown-menu label="Select university">
 			<paper-listbox class="dropdown-content" selected-item="{{universitySelection}}">
 				<!-- University List-->
-				<template is="dom-repeat" items="{{universityList.results}}">
+				<template is="dom-repeat" items="{{universityList}}">
         			<paper-item>
 						<general-card element-color="{{elementColor}}" text$="{{item.universityName}}" pk$="{{item.universityPK}}" icon="social:school"></general-card>
 					</paper-item>
@@ -262,14 +262,14 @@ Polymer({
 	 },
 	 
 	 _handleLoginResponse: function() {
-		this.tmpString = this.responseData.results[0].id;
+		this.tmpString = this.responseData[0].id;
 		document.querySelector('#global').userPK = this.tmpString;
 		this.$.fetchUserDetailAjax.generateRequest();
 	 },
 	 
 	 _handleFetchResponse: function() {
-		document.querySelector('#global').universityPK = this.responseData.results[0].universityKey;
-		document.querySelector('#global').userType = this.responseData.results[0].userType;
+		document.querySelector('#global').universityPK = this.responseData[0].universityKey;
+		document.querySelector('#global').userType = this.responseData[0].userType;
 		document.querySelector('#global').startUi();
 	 },
 	 

@@ -7,7 +7,7 @@
 		last-response="{{classList}}"
 		url="http://127.0.0.1:8000/myapp/classesfromuser/{{pk}}/">
 	</iron-ajax>
-    <template is="dom-repeat" items="{{classList.results}}">
+    <template is="dom-repeat" items="{{classList}}">
         <attendance-card element-color="var(--paper-orange-500)" class-name$="{{item.classId}}" class-pk$="{{item.classPK}}"></attendance-card>
     </template>
   </template>

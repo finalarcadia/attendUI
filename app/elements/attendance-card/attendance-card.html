@@ -79,7 +79,7 @@
 				<paper-listbox class="dropdown-content" selected-item="{{userSelection}}">
 
 			<!-- Student List Cards-->
-				<template is="dom-repeat" items="{{studentData.results}}">
+				<template is="dom-repeat" items="{{studentData}}">
 					<paper-item>
 						<general-card element-color="{{elementColor}}" text$="{{item.first_name}}" pk$="{{item.id}}" icon="face"></general-card>
 					</paper-item>
@@ -109,7 +109,7 @@
 				<br><br>
 				<student-bar late="{{late}}" present="{{present}}" attempt="{{attempt}}" absent="{{absent}}"></student-bar>
 				<div id="calendarContainer">
-					<template is="dom-repeat" items="{{attendanceData.results}}">
+					<template is="dom-repeat" items="{{attendanceData}}">
 						<div id="calendarItem">
 							<calendar-fab date-val=$"{{item.date}}" state$="{{item.mark}}" pk$="{{item.attendancePK}}"></calendar-fab>
 						</div>

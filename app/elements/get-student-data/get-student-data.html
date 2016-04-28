@@ -7,7 +7,7 @@
         last-response="{{studentData}}"
         url="http://127.0.0.1:8000/myapp/classesfromuser/{{pk}}/">
 	  </iron-ajax>
-    <template is="dom-repeat" items="{{studentData.results}}">
+    <template is="dom-repeat" items="{{studentData}}">
         <student-class element-color="var(--paper-blue-500)" class-name$="{{item.classId}}" class-pk$="{{item.classPK}}" location-req$="{{item.locationFlag}}" code-req$="{{item.codeFlag}}"></student-class>
     </template>
   </template>

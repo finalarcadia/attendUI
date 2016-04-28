@@ -44,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<paper-dropdown-menu label="Add Class">
 		<paper-listbox class="dropdown-content" selected-item="{{classSelection}}">
 			<!-- Class List-->
-				<template is="dom-repeat" items="{{classList.results}}">
+				<template is="dom-repeat" items="{{classList}}">
         			<paper-item>
 						<general-card element-color="{{elementColor}}" text$="{{item.classId}}" pk$="{{item.classPK}}" icon="maps:local-library"></general-card>
 					</paper-item>

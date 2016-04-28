@@ -124,7 +124,7 @@ Polymer({
 	
 	_getRosterPkResponse: function() {
 		console.log("tmpstr: ", this.responseData);
-		this.tmpString = this.responseData.results[0].classRosterPK;
+		this.tmpString = this.responseData[0].classRosterPK;
 		console.log("tmpstr: ", this.tmpString);
 		this.$.removeUserAjax.generateRequest();
 	},
