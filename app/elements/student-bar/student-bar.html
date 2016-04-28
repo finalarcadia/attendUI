@@ -89,32 +89,56 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				},
 
 				late: {
-					type: String,
-					value: '25',
+					type: Number,
+					value: 25,
+					observer: '_changedLate'
 				},
 
 				present: {
-					type: String,
-					value: '25',
+					type: Number,
+					value: 25,
+					observer: '_changedPresent'
 				},
 
 				attempt: {
-					type: String,
-					value: '25',
+					type: Number,
+					value: 25,
+					observer: '_changedAttempt'
 				},
 
 				absent: {
-					type: String,
-					value: '25',
+					type: Number,
+					value: 25,
+					observer: '_changedAbsent'
 				}
 
 			},
+			
+			_attached: function() {
+				this.customStyle['--late-percent'] = this.late.toString();
+				this.customStyle['--present-percent'] = this.present.toString();
+				this.customStyle['--attempt-percent'] = this.attempt.toString();
+				this.customStyle['--absent-percent'] = this.absent.toString();
+				this.updateStyles();
+			},
 
-			attached: function() {
-				this.customStyle['--late-percent'] = this.late;
-				this.customStyle['--present-percent'] = this.present;
-				this.customStyle['--attempt-percent'] = this.attempt;
-				this.customStyle['--absent-percent'] = this.absent;
+			_changedLate: function(newValue, oldValue) {
+				this.customStyle['--late-percent'] = newValue.toString();
+				this.updateStyles();
+			},
+			
+			_changedPresent: function(newValue, oldValue) {
+				this.customStyle['--present-percent'] = newValue.toString();
+				this.updateStyles();
+			},
+			
+			_changedAttempt: function(newValue, oldValue) {
+				this.customStyle['--attempt-percent'] = newValue.toString();
+				this.updateStyles();
+			},
+			
+			_changedAbsent: function(newValue, oldValue) {
+				this.customStyle['--absent-percent'] = newValue.toString();
 				this.updateStyles();
 			}
 		});

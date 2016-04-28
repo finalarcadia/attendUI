@@ -25,6 +25,7 @@
 	paper-button {
 		display: inline-block;
 		color: var(--my-color);
+		float: right;
 	}
 
 	paper-fab {
@@ -76,7 +77,7 @@
 		<div class="card-actions">
 			
 			<paper-dropdown-menu label="Select user to add">
-				<paper-listbox class="dropdown-content" selected-item="{{userSelection}}">
+				<paper-listbox style="height: 300px;" class="dropdown-content" selected-item="{{userSelection}}" on-click="_activateButton">
 
 			<!-- Student List Cards-->
 				<template is="dom-repeat" items="{{studentData}}">
@@ -87,31 +88,21 @@
 			<!-- End Student List Cards-->
 				</paper-listbox>
 			</paper-dropdown-menu>
-			<paper-icon-button on-click="_changeStudent" icon="check" title="accept"></paper-icon-button>
+			<paper-icon-button id="checkButton" on-click="_changeStudent" icon="check" title="accept"></paper-icon-button>
 						
-						
-			
-			
-			
-			
-			<!--
-			<br>
-			<div id="monthContainer">
-			<paper-icon-button icon="chevron-left"></paper-icon-button>
-			<span id="monthText">May</span>
-			<paper-icon-button icon="chevron-right"></paper-icon-button>
-			</div>
-			<br>
-			-->
 			
 			<template is="dom-if" if="{{dropdownBool}}">
-				<span id="score">{{total}}%</span>
-				<br><br>
-				<student-bar late="{{late}}" present="{{present}}" attempt="{{attempt}}" absent="{{absent}}"></student-bar>
+				<template is="dom-if" if="{{bool}}">
+					<span id="score">{{total}}%</span>
+					<br><br>
+					<student-bar late="{{late}}" present="{{present}}" attempt="{{attempt}}" absent="{{absent}}"></student-bar>
+					<br>
+					<paper-button on-click="refresh">Apply Changes</paper-button>
+				</template>
 				<div id="calendarContainer">
 					<template is="dom-repeat" items="{{attendanceData}}">
 						<div id="calendarItem">
-							<calendar-fab date-val=$"{{item.date}}" state$="{{item.mark}}" pk$="{{item.attendancePK}}"></calendar-fab>
+							<calendar-fab date-val="{{item.date}}" state="{{item.mark}}" pk$="{{item.attendancePK}}"></calendar-fab>
 						</div>
 					</template>
 				</div>
@@ -249,6 +240,11 @@
 				dropdownBool: {
 					type: Boolean,
 					value: false
+				},
+				
+				bool: {
+					type: Boolean,
+					value: true
 				}
 
 			},
@@ -260,43 +256,53 @@
 			},
 			
 			_changeStudent: function() {
+				this.$.checkButton.disabled = true;
 				this.tmpString = this.userSelection.firstElementChild.pk;
 				this.refreshAttendance();
+			},
+			
+			_activateButton: function() {
+				this.$.checkButton.disabled = false;
 			},
 			
 			refreshAttendance: function() {
 				this.dropdownBool = false;
 				this.$.lateAjax.generateRequest();
+				
+			},
+			
+			refresh: function() {
+				this.bool = false;
+				this.bool = true;
 			},
 			
 			_handleGetStudents: function() {
 			},
 			
 			_lateResponse: function() {
-				this.late = this.responseData.count;
+				this.late = this.responseData.length;
 				this.$.presentAjax.generateRequest();
 			},
 	
 			_presentResponse: function() {
-				this.present = this.responseData.count;
+				this.present = this.responseData.length;
 				this.$.attemptAjax.generateRequest();
 			},
 			
 			_attemptResponse: function() {
-				this.attempt = this.responseData.count;
+				this.attempt = this.responseData.length;
 				this.$.absentAjax.generateRequest();
 			},
 			
 			_absentResponse: function() {
-				this.absent = this.responseData.count;
+				this.absent = this.responseData.length;
 				this.$.totalAjax.generateRequest();
 			},
 			
 			_totalResponse: function() {
 				this.attendanceData = this.responseData;
 				this.dropdownBool = true;
-				console.log("das", this.attendanceData);
-				this.total = this.responseData.count;
+				this.total = this.responseData.length;
 				if (this.late != 0)
 					this.late = Math.floor(this.late / this.total * 100);
 				if (this.present != 0)

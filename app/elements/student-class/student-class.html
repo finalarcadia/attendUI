@@ -260,33 +260,37 @@ Polymer({
 	},
 	
 	_lateResponse: function() {
-		this.late = this.responseData.count;
+		this.late = this.responseData.length;
 		this.$.presentAjax.generateRequest();
 	},
 	
 	_presentResponse: function() {
-		this.present = this.responseData.count;
+		this.present = this.responseData.length;
 		this.$.attemptAjax.generateRequest();
 	},
 	
 	_attemptResponse: function() {
-		this.attempt = this.responseData.count;
+		this.attempt = this.responseData.length;
 		this.$.absentAjax.generateRequest();
 	},
 	
 	_absentResponse: function() {
-		this.absent = this.responseData.count;
+		this.absent = this.responseData.length;
 		this.$.totalAjax.generateRequest();
 	},
 	
 	_totalResponse: function() {
-		this.total = this.responseData.count;
+		this.total = this.responseData.length;
 		this.late = Math.floor(this.late / this.total * 100);
 		this.present = Math.floor(this.present / this.total * 100);
 		this.attempt = Math.floor(this.attempt / this.total * 100);
 		this.absent = Math.floor(this.absent / this.total * 100);
 		this.total = this.late + this.present + this.attempt;
 		//this.bool = true;
+	},
+	
+	toStr: function(num) {
+		return String(num);
 	}
 	
 });

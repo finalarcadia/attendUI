@@ -23,7 +23,7 @@
 
 	</style>
 	<paper-button>
-		<div id="circle">{{name}}</div>
+		<div id="circle">{{dateVal}}</div>
 	</paper-button>
 	
 	<iron-ajax
@@ -68,10 +68,6 @@
 			value: 'attempt'
 		},
 		
-		name: {
-			type: String
-		},
-		
 		attendanceData: {
 					type: Object,
 					value: function() { return {}; }
@@ -110,6 +106,10 @@
 		this.fixDate();
 	},
 	
+	_lol: function() {
+			this.set('dateVal', this.dateVal);
+	},
+	
 	toggle: function() {
 		this.counter++;
 		this.elementColor = colors[this.counter%colors.length];
@@ -119,10 +119,11 @@
 		this.$.manualAttendanceAjax.generateRequest();
 	},
 	
-	//needs fixing
 	fixDate: function() {
-		this.name = (this.dateVal.substr(7,9)).replace("-", "/");
-		console.log("teext", this.name);
+		var fix = this.dateVal.substr(6, 9);
+		this.dateVal = fix.replace("-", "/");
+		fix = this.dateVal.substr(0,5);
+		this.set('dateVal', fix);
 	},
 	
 	_colorChanged: function(newValue, oldValue) {
@@ -131,7 +132,6 @@
 	},
 	
 	_manualAttendanceResponse: function() {
-		console.log("231", this.responseData);
 	}
 });
 
