@@ -63,7 +63,7 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
-		this.userPk = document.querySelector('#global').userPK;
+		this.userPk = document.querySelector('#localStorage').value.userPK;
 		this.$.getAccountAjax.generateRequest();
 	},
 	

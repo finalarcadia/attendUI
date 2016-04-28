@@ -1,0 +1,62 @@
+<dom-module id="local-storage">
+  <iron-localstorage name="my-app-storage"
+    value="{{user}}"
+    on-iron-localstorage-load-empty="initializeDefaultuser"
+  ></iron-localstorage>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'local-storage',
+    properties: {
+      user: {
+        type: Object
+      }
+    },
+    // initializes default if nothing has been stored
+    initializeDefaultuser: function() {
+      this.user = {
+        userPK: "-1",
+        universityPK: "-1",
+        userType: "-1"
+      }
+    },
+    // use path set api to propagate changes to localstorage
+    makeModifications: function(obj) {
+      this.set('user.userPK', obj.userPK);
+      this.set('user.universityPK', obj.universityPK);
+      this.set('user.userType', obj.userType)
+    },
+    
+    startUi: function() {
+            if (this.userType == "student"){
+                document.querySelector('#app').isLogged = false;
+                document.querySelector('#app').isStudent = false;
+                document.querySelector('#app').isLogged = true;
+                document.querySelector('#app').isStudent = true;
+                document.querySelector('#app').isProfessor = false;
+                document.querySelector('#app').isAdmin = false;
+                page('/student');
+            }
+            else if (this.userType == "professor"){
+                document.querySelector('#app').isLogged = false;
+                document.querySelector('#app').isProfessor = false;
+                document.querySelector('#app').isLogged = true;
+                document.querySelector('#app').isProfessor = true;
+                document.querySelector('#app').isStudent = false;
+                document.querySelector('#app').isAdmin = false;
+                page('/professor');
+            }
+            else if (this.userType == "admin"){
+                document.querySelector('#app').isLogged = false;
+                document.querySelector('#app').isAdmin = false;
+                document.querySelector('#app').isLogged = true;
+                document.querySelector('#app').isAdmin = true;
+                document.querySelector('#app').isStudent = false;
+                document.querySelector('#app').isProfessor = false;
+                page('/admin');
+                
+            }
+	    }
+  });
+</script>

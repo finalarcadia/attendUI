@@ -51,11 +51,10 @@
 </head>
 
 <body unresolved>
+	
 	<span id="browser-sync-binding"></span>
 	<template is="dom-bind" id="app">
 		
-		<!-- Global Variables -->
-		<global-vars id="global"></global-vars>
 		<paper-drawer-panel id="paperDrawerPanel">
 			<!-- Drawer Scroll Header Panel -->
 			<paper-scroll-header-panel id="leftPanel" drawer fixed>
@@ -75,12 +74,10 @@
 
 				<!-- Drawer Content -->
 				<paper-menu attr-for-selected="data-route" selected="[[route]]">
-					<template is="dom-if" if="{{!isLogged}}">
 					<a data-route="index" href="{{baseUrl}}">
 						<iron-icon icon="donut-large"></iron-icon>
 						<span>Welcome</span>
 					</a>
-					</template>
 					
 					<template is="dom-if" if="{{isStudent}}">
 					<a data-route="student" href="{{baseUrl}}student">
@@ -151,28 +148,24 @@
 			<iron-pages attr-for-selected="data-route" selected="{{route}}">
 
 				<!-- Begin Welcome Page-->
-				<template is="dom-if" if="{{!isLogged}}">
 				<section data-route="index">
 					<intro-card></intro-card>
 				</section>
-				</template>
 				<!-- End Welcome Page-->
 
 				<!-- Begin Student Page-->
-				<template is="dom-if" if="{{isStudent}}">
 				<section data-route="student">
-					
-					<get-student-data id="studentdata"></get-student-data>
-					
+						<template is="dom-if" if="{{isStudent}}">
+							<get-student-data id="studentdata"></get-student-data>
+						</template>
 				</section>
-				</template>
 				<!-- End Student Page-->
 
 				<!-- Begin Professor Page-->
-				<template is="dom-if" if="{{isProfessor}}">
 				<section data-route="professor">
-					2
-					<get-professor-data id="professordata"></get-professor-data>
+					<template is="dom-if" if="{{isProfessor}}">
+						<get-professor-data id="professordata"></get-professor-data>
+					</template>
 					<!--
 					<request-card class-name="COP 4660 U01" person-name="Gabriel Fernandez" is-Student></request-card>
 					<drop-notification class-name="COP 4660 U01" person-name="John Smith"></drop-notification>
@@ -183,24 +176,24 @@
 
 				<!-- Begin Attendance Page-->
 				<section data-route="attendance">
-					
-					<get-attendance-data id="attendance"></get-attendance-data>
+					<template is="dom-if" if="{{isProfessor}}">
+						<get-attendance-data id="attendance"></get-attendance-data>
+					</template>
 					<!--
 					<attempt-notification class-name="COP 2431 U05" person-name="Gabriel Fernandez" date="5/24/16"></attempt-notification>
 					-->
 
 				</section>
-				</template>
 				<!-- End Attendance Page-->
 
 				<!-- Begin Admin Page-->
-				<template is="dom-if" if="{{isAdmin}}">
+				
 				<section data-route="admin">
-					
-					<get-admin-data id="admindata"></get-admin-data>
-
+					<template is="dom-if" if="{{isAdmin}}">
+						<get-admin-data id="admindata"></get-admin-data>
+					</template>
 				</section>
-				</template>
+				
 				<!-- End Admin Page-->
 
 			</iron-pages>
@@ -219,12 +212,10 @@
 
   // The dom-change event signifies when the template has stamped its DOM.
   app.addEventListener('dom-change', function() {
-	  
-    app.isStudent = false;
-	app.isProfessor = false;
-	app.isAdmin = false;
-	app.isLogged = false;
 	
+			app.isStudent = false;
+			app.isProfessor = false;
+			app.isAdmin = false;
   });
 </script>
 

@@ -192,7 +192,7 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
-		this.uniPk = document.querySelector('#global').universityPK;
+		this.uniPk = document.querySelector('#localStorage').value.universityPK;
 		this.$.userDropdownAjax.generateRequest();
 		this.$.adminClassListAjax.generateRequest();
 	},

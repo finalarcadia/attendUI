@@ -55,8 +55,17 @@ Login and Register Code
 		color: var(--my-color);
 	}
 	</style>
+	
+	<!-- Local Storage -->
+	<iron-localstorage 
+		id = "localStorage"
+		name="app-storage"
+    	value="{{cookie}}"
+    	on-iron-localstorage-load-empty="_initializeDefaultUser">
+	</iron-localstorage>
 
 	<!-- Begin login-->
+	
 	<paper-material>
 		<iron-icon icon="perm-identity"></iron-icon>
 		<paper-input label="Username" value="{{username}}" no-label-float></paper-input>
@@ -122,6 +131,8 @@ Login and Register Code
 		<iron-icon icon="folder-shared"></iron-icon>
 		<paper-input label="Id" value="{{userDetailData.schoolId}}" no-label-float></paper-input>
 		<paper-button on-click="_register">Register</paper-button>
+		<paper-button on-click="getInfo">TEST</paper-button>
+		
 		<iron-ajax
 			id = "loginAjax"
 			method="GET"
@@ -230,6 +241,11 @@ Polymer({
 		
 		boolOff: {
 			type: Boolean,
+		},
+		
+		cookie: {
+			type: Object,
+			value: function() { return {}; }	
 		}
 
 	},
@@ -240,11 +256,11 @@ Polymer({
 	},
 	
 	getInfo: function(){
-		console.log("response", this.responseData);
-		console.log("user", document.querySelector('#global').userPK);
-		console.log("uni", document.querySelector('#global').universityPK);
-		console.log("type", document.querySelector('#global').userType);
-		console.log("app", document.querySelector('#app').isStudent);
+		this.refreshUi();
+		console.log("cookie:", this.cookie);
+		console.log("iron:", this.$.localStorage.value);
+		console.log("iron:", document.querySelector('#localStorage').value.userType);
+		console.log("testing:", document.querySelector('#app').isAdmin);
      },
 	 
 	 universityListOn: function(){
@@ -263,19 +279,22 @@ Polymer({
 	 
 	 _handleLoginResponse: function() {
 		this.tmpString = this.responseData[0].id;
-		document.querySelector('#global').userPK = this.tmpString;
+		this.cookie.userPK = this.tmpString;
 		this.$.fetchUserDetailAjax.generateRequest();
 	 },
 	 
+	 //final login Response
 	 _handleFetchResponse: function() {
-		document.querySelector('#global').universityPK = this.responseData[0].universityKey;
-		document.querySelector('#global').userType = this.responseData[0].userType;
-		document.querySelector('#global').startUi();
+		this.cookie.universityPK = this.responseData[0].universityKey;
+		this.cookie.userType = this.responseData[0].userType;
+		this.makeModifications();
+		this.refreshUi();
+		this.redirect();
 	 },
 	 
 	 _register: function(){
 		 //handle userType
-		document.querySelector('#global').userType = this.userDetailData.userType;
+		this.cookie.userType = this.userDetailData.userType;
 		if (this.userDetailData.userType == "admin")
 			this.$.createUniversityAjax.generateRequest()
 		else
@@ -284,27 +303,79 @@ Polymer({
 	
 	_handleCreateUniversity: function() {
 		//handle global admin university
-		document.querySelector('#global').universityPK = this.responseData.universityPK;
-		this.userDetailData.universityKey = document.querySelector('#global').universityPK
+		this.cookie.universityPK = this.responseData.universityPK;
+		this.userDetailData.universityKey = this.cookie.universityPK
 		this.$.registerAjax.generateRequest();
 	},
 	
 	_handleRegisterResponse: function(){
 		//handle global other user's university
-		if (document.querySelector('#global').userType != "admin"){
-			document.querySelector('#global').universityPK = this.universitySelection.firstElementChild.pk;
-			this.userDetailData.universityKey = document.querySelector('#global').universityPK
+		if (this.cookie.userType != "admin"){
+			this.cookie.universityPK = this.universitySelection.firstElementChild.pk;
+			this.userDetailData.universityKey = this.cookie.universityPK
 		}
 		//handle global user PK
-		document.querySelector('#global').userPK = this.responseData.id;
-		this.userDetailData.userIdKey = document.querySelector('#global').userPK
+		this.cookie.userPK = this.responseData.id;
+		this.userDetailData.userIdKey = this.cookie.userPK
 		this.$.createUserDetailAjax.generateRequest();
 	  },
 	  
+	  //final register response
 	  _handleCreateUserDetail: function(){
-		  console.log("response", this.responseData);
-		  document.querySelector('#global').startUi();
-	  }
+		  this.makeModifications();
+		  this.refreshUi();
+		  this.redirect();
+	  },
+	  
+	  <!--Cookie management-->
+	  
+	  _initializeDefaultUser: function() {
+		this.cookie = {
+			userPK: "-1",
+			universityPK: "-1",
+			userType: "-1"
+		}
+	  },
+	  
+	  makeModifications: function() {
+      	this.set('cookie.userPK', this.cookie.userPK);
+      	this.set('cookie.universityPK', this.cookie.universityPK);
+      	this.set('cookie.userType', this.cookie.userType);
+    	},
+		
+		refreshUi: function() {
+			if (document.querySelector('#localStorage').value.userType == "student") {
+				document.querySelector('#app').isLogged = true;
+				document.querySelector('#app').isStudent = true;
+				document.querySelector('#app').isProfessor = false;
+				document.querySelector('#app').isAdmin = false;
+			} else if (document.querySelector('#localStorage').value.userType == "professor"){
+				document.querySelector('#app').isLogged = true;
+				document.querySelector('#app').isStudent = false;
+				document.querySelector('#app').isProfessor = true;
+				document.querySelector('#app').isAdmin = false;
+			} else if (document.querySelector('#localStorage').value.userType == "admin"){
+				document.querySelector('#app').isLogged = true;
+				document.querySelector('#app').isStudent = false;
+				document.querySelector('#app').isProfessor = false;
+				document.querySelector('#app').isAdmin = true;
+			} else {
+				document.querySelector('#app').isLogged = false;
+				document.querySelector('#app').isStudent = false;
+				document.querySelector('#app').isProfessor = false;
+				document.querySelector('#app').isAdmin = false;
+			}
+		},
+		
+		redirect: function() {
+			if (document.querySelector('#localStorage').value.userType == "student")
+				page('/student');
+			else if (document.querySelector('#localStorage').value.userType == "professor")
+				page('/professor');
+			else if (document.querySelector('#localStorage').value.userType == "admin")
+				page('/admin');
+				
+		}
 });
 </script>
 </dom-module>
