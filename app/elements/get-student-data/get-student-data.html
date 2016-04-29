@@ -4,30 +4,53 @@
         id = "studentPopulateAjax"
         method="GET"
         handle-as="json"
+        on-response="_studentPopulateResponse"
         last-response="{{studentData}}"
         url="http://127.0.0.1:8000/myapp/classesfromuser/{{pk}}/">
 	  </iron-ajax>
-    <template is="dom-repeat" items="{{studentData}}">
-        <student-class element-color="var(--paper-blue-500)" class-name$="{{item.classId}}" class-pk$="{{item.classPK}}" location-req$="{{item.locationFlag}}" code-req$="{{item.codeFlag}}"></student-class>
+    <template is="dom-if" if="{{bool}}">
+      <template is="dom-repeat" items="{{studentData}}">
+          <student-class element-color="var(--paper-blue-500)" class-name$="{{item.classId}}" class-pk$="{{item.classPK}}" location-req$="{{item.locationFlag}}" code-req$="{{item.codeFlag}}"></student-class>
+      </template>
     </template>
   </template>
 
   <script>
     Polymer({
 
-          is: 'get-student-data',
+      is: 'get-student-data',
           
-          properties: {
+      properties: {
+        
+          pk: {
+            type: String
+          },
 
           studentData: {
             type: Object,
-          }
+            value: function() { return {}; }	
+          },
+          
+          bool: {
+					type: Boolean,
+					value: true
+				  }
+          
       },
 
       ready: function() {
         this.pk = document.querySelector('#localStorage').value.userPK;
         this.$.studentPopulateAjax.generateRequest();
       },
+      
+      refresh: function() {
+			this.bool = false;
+			this.$.studentPopulateAjax.generateRequest();
+		  },
+      
+      _studentPopulateResponse: function(){
+				this.bool = true;
+		},
 
    });
   </script>

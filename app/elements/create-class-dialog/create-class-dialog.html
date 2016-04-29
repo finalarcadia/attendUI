@@ -29,7 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 
 	#small {
-		width: 75px;
+		width: 180px;
 	}
 
 	#large {
@@ -41,23 +41,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<h2>Create Class</h2>
 		<div>
 			Class Id:
-			<paper-input id="large" label="AAA 1111 U01" value="{{classData.classId}}" no-label-float></paper-input>
+			<paper-input id="large" label="AAA 1111 U01" value="{{name}}" no-label-float></paper-input>
 			<br>
-			Class time:
-			<paper-input id="small" label="hh:mm:ss" value="{{classData.startTime}}" no-label-float></paper-input>
-			-
-			<paper-input id="small" label="hh:mm:ss" value="{{classData.endTime}}" no-label-float></paper-input>
+			Start time:
+			<paper-input id="small" label="hh:mm (military)" value="{{time}}" no-label-float></paper-input>
 			<br>
-			Class date:
-			<paper-input id="small" label="yyyy-mm-dd" value="{{classData.startDate}}" no-label-float></paper-input>
-			-
-			<paper-input id="small" label="yyyy-mm-dd" value="{{classData.endDate}}" no-label-float></paper-input>
+			Start date:
+			<paper-input id="small" label="yyyy-mm-dd" value="{{date}}" no-label-float></paper-input>
 		</div>
 		<iron-ajax
 			id = "createClassAjax"
 			method="POST"
 			content-type="application/x-www-form-urlencoded"
 			body="{{classData}}"
+			on-response="_createClassResponse"
     		url="http://127.0.0.1:8000/myapp/classes/">
 		</iron-ajax>
 		<div class="buttons">
@@ -83,11 +80,37 @@ Polymer({
 		classData: {
 			type: Object,
 			value: function() { return {}; }
+		},
+		
+		time: {
+			type: String,
+			observer: '_fix'
+		},
+		
+		date: {
+			type: String,
+			observer: '_fix'
+		},
+		
+		name: {
+			type: String	
+		},
+		
+		count: {
+			type: Number,
+			value: 0
 		}
 
 	},
 	
 	_createClass: function(){
+		console.log("count: ", this.count);
+		this.classData = {};
+		this.classData.classId = this.name;
+		if (this.count > 2) {
+			var tmp = this.date + "T" + this.time + ":00.0";
+			this.classData.start = tmp;
+		}
 		this.classData.universityKey = document.querySelector('#localStorage').value.universityPK;
 		this.$.createClassAjax.generateRequest();
 	},
@@ -95,6 +118,14 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
+	},
+	
+	_fix: function(var1, var2) {
+		this.count++;
+	},
+	
+	_createClassResponse: function() {
+		document.querySelector('#admindata').refresh();
 	}
 });
 </script>

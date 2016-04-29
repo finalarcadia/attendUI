@@ -23,7 +23,7 @@
 
 	</style>
 	<paper-button>
-		<div id="circle">{{dateVal}}</div>
+		<div id="circle">{{name}}</div>
 	</paper-button>
 	
 	<iron-ajax
@@ -51,7 +51,8 @@
 		},
 
 		dateVal: {
-			type: String
+			type: String,
+			observer: '_dateObserver'
 		},
 		
 		pk: {
@@ -76,6 +77,15 @@
 		responseData: {
 			type: Object,
 			value: function() { return {}; }
+		},
+		
+		count: {
+			type: Number,
+			value: 0
+		},
+		
+		name: {
+			type: String
 		}
 
 	},
@@ -98,16 +108,18 @@
 			this.elementColor = colors[this.counter%colors.length];
 			this.state = states[this.counter%states.length];	
 		}
+		
 		this.customStyle['--current-color'] = this.elementColor;
 		this.updateStyles();
+		
 	},
 	
 	attached: function() {
 		this.fixDate();
 	},
 	
-	_lol: function() {
-			this.set('dateVal', this.dateVal);
+	_dateObserver: function() {
+		this.fixDate();
 	},
 	
 	toggle: function() {
@@ -120,10 +132,8 @@
 	},
 	
 	fixDate: function() {
-		var fix = this.dateVal.substr(6, 9);
-		this.dateVal = fix.replace("-", "/");
-		fix = this.dateVal.substr(0,5);
-		this.set('dateVal', fix);
+		var fix = this.dateVal.substr(5, 5);
+		this.name = fix.replace("-", "/");
 	},
 	
 	_colorChanged: function(newValue, oldValue) {

@@ -5,39 +5,56 @@
 		method="GET"
 		handle-as="json"
 		last-response="{{classList}}"
+		on-response="_adminPopulateResponse"
 		url="http://127.0.0.1:8000/myapp/classes/?universityKey={{pk}}">
 	</iron-ajax>
+	<template is="dom-if" if="{{bool}}">
     <template is="dom-repeat" items="{{classList}}">
         <admin-class class-name$="{{item.classId}}" class-pk$="{{item.classPK}}"></admin-class>
     </template>
+	</template>
   </template>
 
   <script>
-    Polymer({
+			Polymer({
 
-    is: 'get-admin-data',
-     
-    properties: {
-		
-		pk: {
-			type: String
-		},
-		
-		classList: {
-			type: Object,
-			value: function() { return {}; }	
-		}
+			is: 'get-admin-data',
+			
+			properties: {
+			
+				pk: {
+					type: String
+				},
+				
+				classList: {
+					type: Object,
+					value: function() { return {}; }	
+				},
+				
+				bool: {
+					type: Boolean,
+					value: true
+				}
 
-	   },
+			},
        
     ready: function() {
-		this.pk = document.querySelector('#localStorage').value.universityPK;
-		this.$.adminPopulateAjax.generateRequest();
-	},
+			this.pk = document.querySelector('#localStorage').value.universityPK;
+			this.$.adminPopulateAjax.generateRequest();
+		},
      
-     getInfo: function(){
+		getInfo: function(){
          console.log("the response is", this.classList);
-     }
+		},
+		
+		_adminPopulateResponse: function(){
+				this.bool = true;
+		},
+		
+		refresh: function() {
+			this.bool = false;
+			this.$.adminPopulateAjax.generateRequest();
+		}
 
    });
   </script>

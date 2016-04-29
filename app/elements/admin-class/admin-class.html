@@ -222,10 +222,7 @@ Polymer({
 	},
 	
 	_deleteClassResponse: function() {
-		this.refreshList();
-		this._toggle();
-		this.customStyle['--my-color'] = "var(--paper-grey-500)";
-		this.updateStyles();
+		document.querySelector('#admindata').refresh();
 	},
 	
 	//TODO: CALL THIS FROM DROPDOWN BUTTON

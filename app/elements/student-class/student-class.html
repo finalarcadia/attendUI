@@ -85,12 +85,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<student-bar late="{{late}}" present="{{present}}" attempt="{{attempt}}" absent="{{absent}}"></student-bar>
 				<br>
 				<span id="score">Attendance: {{total}}%</span>
-				<!--
-				<paper-fab mini icon="close" onclick="_toggleDialog('#dropClassDialog')"></paper-fab>
-				-->
+				<paper-fab mini icon="close" on-click="removeClass"></paper-fab>
 			</iron-collapse>
 		</div>
 	</paper-card>
+	
+	<iron-ajax
+		id = "recordAjaxOld"
+		method="POST"
+		content-type="application/x-www-form-urlencoded"
+		body="{{attendanceData}}"
+		last-response="{{responseData}}"
+        on-response="_recordResponse"
+		url="http://127.0.0.1:8000/myapp/attendance/">
+	</iron-ajax>
 	
 	<iron-ajax
 		id = "recordAjax"
@@ -99,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		body="{{attendanceData}}"
 		last-response="{{responseData}}"
         on-response="_recordResponse"
-		url="http://127.0.0.1:8000/myapp/attendance/">
+		url="http://127.0.0.1:8000/myapp/record/{{userPk}}/{{classPk}}/">
 	</iron-ajax>
 	
 	<iron-ajax
@@ -146,6 +154,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         on-response="_totalResponse"
 		url="http://127.0.0.1:8000/myapp/attendance/?userIdKey={{userPk}}&classkey={{classPk}}">
 	</iron-ajax>
+	
+	<iron-ajax
+		id = "getRosterPkAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_getRosterPkResponse"
+		url="http://127.0.0.1:8000/myapp/roster/?userIdKey={{userPk}}&classIdKey={{classPk}}">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "removeClassAjax"
+		method="DELETE"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_removeClassResponse"
+		url="http://127.0.0.1:8000/myapp/roster/{{rosterPk}}/">
+	</iron-ajax>
 
 </template>
 
@@ -171,6 +197,10 @@ Polymer({
 		},
 		
 		classPk: {
+			type: String
+		},
+		
+		rosterPk: {
 			type: String
 		},
 
@@ -247,6 +277,12 @@ Polymer({
 	},
 	
 	recordAttendance: function() {
+		this.attendanceData.classkey = this.classPk;
+		this.attendanceData.userIdKey = this.userPk;
+		this.$.recordAjax.generateRequest();
+	},
+	
+	recordAttendanceOld: function() {
 		var vals = ["late", "present", "attempt", "absent"];
 		this.attendanceData.mark = vals[this.getRandomIntInclusive(0,3)];
 		console.log("mark", this.attendanceData.mark);
@@ -289,8 +325,17 @@ Polymer({
 		//this.bool = true;
 	},
 	
-	toStr: function(num) {
-		return String(num);
+	removeClass: function() {
+		this.$.getRosterPkAjax.generateRequest();
+	},
+	
+	_getRosterPkResponse: function() {
+		this.rosterPk = this.responseData[0].classRosterPK;
+		this.$.removeClassAjax.generateRequest();
+	},
+	
+	_removeClassResponse: function() {
+		document.querySelector('#studentdata').refresh();
 	}
 	
 });

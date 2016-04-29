@@ -192,32 +192,20 @@ Polymer({
 	},
 	
 	_lateThreshold: function() {
-		if (this.lateInput.length == 1)
-			var tmpString = "0";
-		else
-			var tmpString = "";
 		this.classData = {};
-		this.classData.lateThreshold = "00:" + tmpString + this.lateInput + ":00";
+		this.classData.lateThreshold = this.lateInput;
 		this.$.updateClassAjax.generateRequest();
 	},
 	
 	_absentThreshold: function() {
-		if (this.absentInput.length == 1)
-			var tmpString = "0";
-		else
-			var tmpString = "";
 		this.classData = {};
-		this.classData.absentThreshold = "00:" + tmpString + this.absentInput + ":00";
+		this.classData.absentThreshold = this.absentInput;
 		this.$.updateClassAjax.generateRequest();
 	},
 	
 	_codeExpiration: function() {
-		if (this.codeExpirationInput.length == 1)
-			var tmpString = "0";
-		else
-			var tmpString = "";
 		this.classData = {};
-		this.classData.codeExpiration = "00:" + tmpString + this.codeExpirationInput + ":00";
+		this.classData.codeExpiration = this.codeExpirationInput;
 		this.$.updateClassAjax.generateRequest();
 	},
 	
@@ -248,7 +236,10 @@ Polymer({
 	},
 	
 	_genCode: function() {
-		this.code = this.getRandomIntInclusive(1111,9999);
+		this.code = this.getRandomIntInclusive(10000,99999);
+		this.classData = {};
+		this.classData.code = this.code;
+		this.$.updateClassAjax.generateRequest();
 	}
 });
 </script>

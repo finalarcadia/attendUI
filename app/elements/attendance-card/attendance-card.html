@@ -96,13 +96,13 @@
 					<span id="score">{{total}}%</span>
 					<br><br>
 					<student-bar late="{{late}}" present="{{present}}" attempt="{{attempt}}" absent="{{absent}}"></student-bar>
+					</template>
 					<br>
-					<paper-button on-click="refresh">Apply Changes</paper-button>
-				</template>
+					<paper-button on-click="refreshBar">Apply Changes</paper-button>
 				<div id="calendarContainer">
 					<template is="dom-repeat" items="{{attendanceData}}">
 						<div id="calendarItem">
-							<calendar-fab date-val="{{item.date}}" state="{{item.mark}}" pk$="{{item.attendancePK}}"></calendar-fab>
+							<calendar-fab date-val="{{item.time}}" state="{{item.mark}}" pk$="{{item.attendancePK}}"></calendar-fab>
 						</div>
 					</template>
 				</div>
@@ -244,7 +244,7 @@
 				
 				bool: {
 					type: Boolean,
-					value: true
+					value: false
 				}
 
 			},
@@ -268,12 +268,11 @@
 			refreshAttendance: function() {
 				this.dropdownBool = false;
 				this.$.lateAjax.generateRequest();
-				
 			},
 			
-			refresh: function() {
+			refreshBar: function() {
 				this.bool = false;
-				this.bool = true;
+				this.$.lateAjax.generateRequest();
 			},
 			
 			_handleGetStudents: function() {
@@ -301,7 +300,9 @@
 			
 			_totalResponse: function() {
 				this.attendanceData = this.responseData;
-				this.dropdownBool = true;
+				if (this.dropdownBool == false)
+					this.dropdownBool = true;
+				this.bool = true;
 				this.total = this.responseData.length;
 				if (this.late != 0)
 					this.late = Math.floor(this.late / this.total * 100);
