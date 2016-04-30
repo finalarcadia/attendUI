@@ -1,6 +1,21 @@
 <dom-module id="get-admin-data">
   <template>
-    <iron-ajax
+	  
+	<!--Requests-->
+	<template is="dom-if" if="{{requestBool}}">
+		<template is="dom-repeat" items="{{requestList}}" filter="isDrop">
+				<request-card element-color="var(--paper-orange-500)" user-pk$="{{item.userIdKey}}" class-pk$="{{item.classIdKey}}" request-pk$="{{item.classRequestPK}}" bool$="{{item.requestType}}"></request-card>
+		</template>
+	</template>
+    
+	<!--Classes-->
+	<template is="dom-if" if="{{bool}}">
+		<template is="dom-repeat" items="{{classList}}">
+			<admin-class class-name$="{{item.classId}}" class-pk$="{{item.classPK}}"></admin-class>
+		</template>
+	</template>
+	
+	<iron-ajax
 		id = "adminPopulateAjax"
 		method="GET"
 		handle-as="json"
@@ -8,11 +23,16 @@
 		on-response="_adminPopulateResponse"
 		url="http://127.0.0.1:8000/myapp/classes/?universityKey={{pk}}">
 	</iron-ajax>
-	<template is="dom-if" if="{{bool}}">
-    <template is="dom-repeat" items="{{classList}}">
-        <admin-class class-name$="{{item.classId}}" class-pk$="{{item.classPK}}"></admin-class>
-    </template>
-	</template>
+	
+	<iron-ajax
+		id = "getRequestAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{requestList}}"
+		on-response="_getRequestsResponse"
+		url="http://127.0.0.1:8000/myapp/requestsfromuniversity/{{pk}}/">
+	</iron-ajax>
+	
   </template>
 
   <script>
@@ -33,27 +53,48 @@
 				
 				bool: {
 					type: Boolean,
-					value: true
+					value: false
+				},
+					
+				requestBool: {
+					type: Boolean,
+					value: false
+				},
+				
+				requestList: {
+					type: Object,
+					value: function() { return {}; }	
 				}
 
 			},
        
-    ready: function() {
+		ready: function() {
 			this.pk = document.querySelector('#localStorage').value.universityPK;
 			this.$.adminPopulateAjax.generateRequest();
-		},
-     
-		getInfo: function(){
-         console.log("the response is", this.classList);
+			this.$.getRequestAjax.generateRequest();
 		},
 		
 		_adminPopulateResponse: function(){
-				this.bool = true;
+			this.bool = true;
 		},
 		
 		refresh: function() {
 			this.bool = false;
 			this.$.adminPopulateAjax.generateRequest();
+		},
+     
+		refreshRequests: function(){
+			this.requestBool = false;
+			this.$.getRequestAjax.generateRequest();
+		},
+		 
+		 _getRequestsResponse: function() {
+			 this.requestBool = true;
+			 this.refresh();
+		 },
+		 
+		 isDrop: function(item) {
+    		return !item.requestType;
 		}
 
    });

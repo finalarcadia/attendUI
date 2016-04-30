@@ -1,13 +1,3 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="request-card">
@@ -18,6 +8,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	}
 
 	paper-card {
+		margin: 1px 16px;
 		width: 100%;
 		padding: 3px 3px 3px 3px;
 	}
@@ -37,18 +28,70 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<paper-card>
 		<!-- header -->
 		<div class="card-content">
+			<!--Normal request-->
+			<template is="dom-if" if="{{!bool}}">
 				<iron-icon icon="maps:local-library"></iron-icon>
 				{{className}}
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<iron-icon icon="assignment-ind" hidden$="{{!isProfessor}}"></iron-icon>
-				<iron-icon icon="face" hidden$="{{!isStudent}}"></iron-icon>
+				<iron-icon icon="face"></iron-icon>
 				{{personName}}
-			<span style="float:right;">
-				<paper-icon-button icon="check" title="accept"></paper-icon-button>
-				<paper-icon-button icon="clear" title="accept"></paper-icon-button>
-			</span>
+				<span style="float:right;">
+					<paper-icon-button icon="check" title="accept" on-click="addToRoster"></paper-icon-button>
+					<paper-icon-button icon="clear" title="decline" on-click="deleteRequest"></paper-icon-button>
+				</span>
+			</template>
+			
+			<!-- Dropped class request-->
+			<template is="dom-if" if="{{bool}}">
+				<iron-icon icon="feedback"></iron-icon>
+				{{personName}}
+				dropped from
+				<iron-icon icon="maps:local-library"></iron-icon>
+				{{className}}
+				<span style="float:right;">
+					<paper-icon-button icon="check" title="accept" on-click="deleteRequest"></paper-icon-button>
+				</span>
+			</template>
+			
 		</div>
 	</paper-card>
+	
+	<iron-ajax
+		id = "getUserAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+		on-response="_getUserResponse"
+		url="http://127.0.0.1:8000/myapp/users/{{userPk}}/">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "getClassAjax"
+		method="GET"
+		handle-as="json"
+		last-response="{{responseData}}"
+		on-response="_getClassResponse"
+		url="http://127.0.0.1:8000/myapp/classes/{{classPk}}/">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "deleteResquestAjax"
+		method="DELETE"
+		handle-as="json"
+		last-response="{{responseData}}"
+        on-response="_deleteRequestResponse"
+		url="http://127.0.0.1:8000/myapp/requests/{{requestPk}}/">
+	</iron-ajax>
+	
+	<iron-ajax
+		id = "addToRosterAjax"
+		method="POST"
+		content-type="application/x-www-form-urlencoded"
+		body="{{rosterData}}"
+		on-response="_addToRosterResponse"
+		last-response="{{responseData}}"
+		url="http://127.0.0.1:8000/myapp/roster/">
+	</iron-ajax>
+	
 </template>
 
 <script>
@@ -73,14 +116,31 @@ Polymer({
 			value: 'noPersonNameGiven',
 		},
 
-		isProfessor: {
+		bool: {
 			type: Boolean,
 			value: false
 		},
-
-		isStudent: {
-			type: Boolean,
-			value: false
+		
+		classPk: {
+			type: String
+		},
+		
+		userPk: {
+			type: String
+		},
+		
+		requestPk: {
+			type: String
+		},
+		
+		responseData: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		rosterData: {
+			type: Object,
+			value: function() { return {}; }	
 		}
 
 	},
@@ -88,7 +148,41 @@ Polymer({
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
+		this.$.getUserAjax.generateRequest();
+		this.$.getClassAjax.generateRequest();
+	},
+	
+	_getUserResponse: function() {
+		this.personName = this.responseData.username;
+	},
+	
+	_getClassResponse: function() {
+		this.className = this.responseData.classId;
+	},
+	
+	deleteRequest: function() {
+		this.$.deleteResquestAjax.generateRequest();
+	},
+	
+	addToRoster: function() {
+		this.rosterData.classIdKey = this.classPk;
+		this.rosterData.userIdKey = this.userPk;
+		this.$.addToRosterAjax.generateRequest();
+
+	},
+	
+	_deleteRequestResponse: function() {
+		if (document.querySelector('#localStorage').value.userType == "professor")
+			document.querySelector('#professordata').refreshRequests();
+		else
+			document.querySelector('#admindata').refreshRequests();
+	},
+	
+	_addToRosterResponse: function() {
+		this.$.deleteResquestAjax.generateRequest();
 	}
+	
+	
 });
 </script>
 </dom-module>

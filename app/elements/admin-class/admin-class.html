@@ -194,7 +194,7 @@ Polymer({
 		this.updateStyles();
 		this.uniPk = document.querySelector('#localStorage').value.universityPK;
 		this.$.userDropdownAjax.generateRequest();
-		this.$.adminClassListAjax.generateRequest();
+		this.refreshList();
 	},
 	
 	refreshList: function() {
@@ -204,6 +204,9 @@ Polymer({
 	},
 	
 	_toggle: function() {
+		//
+		this.refreshList();
+		//
 		var moreInfo = this.$.dropdown;
 		var iconButton = Polymer.dom(event).localTarget;
 		iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'

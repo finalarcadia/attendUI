@@ -153,6 +153,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<paper-button dialog-confirm>Delete</paper-button>
 				</div>
 			</paper-dialog>
+			
+			<paper-dialog id="general" modal>
+				<h2>{{header}}</h2>
+				<div>
+				{{text}}
+				</div>
+				<div class="buttons">
+					<paper-button dialog-dismiss hidden$="{{!twoButtons}}">{{lButton}}</paper-button>
+					<paper-button dialog-confirm>{{rButton}}</paper-button>
+				</div>
+			</paper-dialog>
 
 			<!-- End Dialog List-->
 
@@ -164,16 +175,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			<paper-toast  id="locationErrorToast" text="Could not get your location. Try again later."></paper-toast>
 			<paper-toast  id="createClassToast" text="Could not create class, already exists."></paper-toast>
 			<!-- Begin Toast List-->
-			
-			<!--Being ajax list-->
-			<iron-ajax
-				id = "deleteUserAjax"
-				method="GET"
-				handle-as="json"
-				last-response="{{responseData}}"
-				on-response="_deleteUserResponse"
-				url="http://127.0.0.1:8000/myapp/usersfromuniversity/{{uniPk}}/">
-			</iron-ajax>
 
     </template>
 
@@ -188,12 +189,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			value: 'var(--accent-color)',
 		},
 		
-		userPk: {
+		lButton: {
 			type: String,
 		},
 		
-		classPk: {
+		rButton: {
 			type: String,
+		},
+		
+		header: {
+			type: String
+		},
+		
+		text: {
+			type: String
+		},
+		
+		twoButtons: {
+			type: Boolean,
+			value: false
 		}
 
 	},
@@ -201,23 +215,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	ready: function() {
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
-	},
-	
-	deleteUser: function() {
-		this.$.deleteUserAjax.requestResponse();
-	},
-	
-	_deleteUserResponse: function() {
-		var tmpstr = '#adminclass' + this.classPk
-		console.log("tmpstr: ", tmpstr);
-		console.log("tmpstr: ", Polymer.dom(document.querySelector('#adminrepeat')));
-		
-	},
-	
-	getInfo: function() {
-		console.log("From popuplist", this.userPk);
-		console.log("From popuplist", this.classPk);
-		this._deleteUserResponse();
 	}
 });
     </script>

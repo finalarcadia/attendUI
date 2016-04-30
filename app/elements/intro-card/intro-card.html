@@ -70,7 +70,7 @@ Login and Register Code
 		<iron-icon icon="perm-identity"></iron-icon>
 		<paper-input label="Username" value="{{username}}" no-label-float></paper-input>
 		<iron-icon icon="lock-outline"></iron-icon>
-		<paper-input label="Password" value="{{password}}" no-label-float></paper-input>
+		<paper-input label="Password" value="{{password}}" no-label-float type="password"></paper-input>
 		<paper-button on-click="_login">Login</paper-button>
 	</paper-material>
 
@@ -123,13 +123,13 @@ Login and Register Code
 		<iron-icon icon="perm-identity"></iron-icon>
 		<paper-input label="Username" value="{{userData.username}}" no-label-float></paper-input>
 		<iron-icon icon="lock-outline"></iron-icon>
-		<paper-input label="Password" value="{{userData.password}}" no-label-float></paper-input>
+		<paper-input label="Password" value="{{userData.password}}" no-label-float type="password"></paper-input>
 		<br>
 		<iron-icon icon="face"></iron-icon>
 		<paper-input label="First name" value="{{userData.first_name}}" no-label-float></paper-input>
 		<paper-input label="Last name" value="{{userData.last_name}}" no-label-float></paper-input><br>
 		<iron-icon icon="folder-shared"></iron-icon>
-		<paper-input label="Id" value="{{userDetailData.schoolId}}" no-label-float></paper-input>
+		<paper-input label="Id" value="{{userDetailData.schoolId}}" no-label-float auto-validate pattern="[0-9]*" error-message="numbers only"></paper-input>
 		<paper-button on-click="_register">Register</paper-button>
 		<paper-button on-click="getInfo">TEST</paper-button>
 		
@@ -156,6 +156,7 @@ Login and Register Code
 			body="{{userData}}"
 			on-response="_handleRegisterResponse"
 			last-response="{{responseData}}"
+			on-error="_registerError"
     		url="http://127.0.0.1:8000/myapp/users/">
 		</iron-ajax>
 		<iron-ajax
@@ -278,9 +279,13 @@ Polymer({
 	 },
 	 
 	 _handleLoginResponse: function() {
-		this.tmpString = this.responseData[0].id;
-		this.cookie.userPK = this.tmpString;
-		this.$.fetchUserDetailAjax.generateRequest();
+		if (this.responseData.length == 0)
+			this._loginError();
+		else {
+			this.tmpString = this.responseData[0].id;
+			this.cookie.userPK = this.tmpString;
+			this.$.fetchUserDetailAjax.generateRequest();
+		}
 	 },
 	 
 	 //final login Response
@@ -375,6 +380,22 @@ Polymer({
 			else if (document.querySelector('#localStorage').value.userType == "admin")
 				page('/admin');
 				
+		},
+		
+		_registerError: function() {
+			document.querySelector('#popup').twoButtons = false;
+			document.querySelector('#popup').header = "Error";
+			document.querySelector('#popup').text = "Username already taken, or you didn't fill out all the requirements";
+			document.querySelector('#popup').rButton = "Ok"
+			document.querySelector('#popup').querySelector('#general').toggle();
+		},
+		
+		_loginError: function() {
+			document.querySelector('#popup').twoButtons = false;
+			document.querySelector('#popup').header = "Error";
+			document.querySelector('#popup').text = "Username and/or password are incorrect";
+			document.querySelector('#popup').rButton = "Ok"
+			document.querySelector('#popup').querySelector('#general').toggle();
 		}
 });
 </script>

@@ -172,6 +172,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         on-response="_removeClassResponse"
 		url="http://127.0.0.1:8000/myapp/roster/{{rosterPk}}/">
 	</iron-ajax>
+	
+	<iron-ajax
+		id = "createRequestAjax"
+		method="POST"
+		content-type="application/x-www-form-urlencoded"
+		body="{{requestData}}"
+		on-response="_createRequestResponse"
+		url="http://127.0.0.1:8000/myapp/requests/">
+	</iron-ajax>
 
 </template>
 
@@ -220,6 +229,11 @@ Polymer({
 		},
 		
 		attendanceData: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		requestData: {
 			type: Object,
 			value: function() { return {}; }	
 		},
@@ -335,6 +349,13 @@ Polymer({
 	},
 	
 	_removeClassResponse: function() {
+		this.requestData.classIdKey = this.classPk;
+		this.requestData.userIdKey = this.userPk;
+		this.requestData.requestType = true;
+		this.$.createRequestAjax.generateRequest();
+	},
+	
+	_createRequestResponse: function() {
 		document.querySelector('#studentdata').refresh();
 	}
 	

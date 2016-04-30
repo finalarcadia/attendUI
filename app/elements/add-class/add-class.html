@@ -1,13 +1,3 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="add-class">
@@ -51,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     			</template>
 		</paper-listbox>
 	</paper-dropdown-menu>
-	<paper-icon-button icon="add" on-click="_getClassList"></paper-icon-button>
+	<paper-icon-button icon="add" on-click="sendRequest"></paper-icon-button>
 	</template>
 	
 	<iron-ajax
@@ -64,14 +54,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	</iron-ajax>
 	<!--TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO-->
 	<iron-ajax
-			id = "createRequestAjax"
-			method="POST"
-			content-type="application/x-www-form-urlencoded"
-			body="{{userData}}"
-			on-response="_handleRegisterResponse"
-			last-response="{{responseData}}"
-    		url="http://127.0.0.1:8000/myapp/users/">
-		</iron-ajax>
+		id = "createRequestAjax"
+		method="POST"
+		content-type="application/x-www-form-urlencoded"
+		body="{{requestData}}"
+		on-response="_createRequestResponse"
+		url="http://127.0.0.1:8000/myapp/requests/">
+	</iron-ajax>
 
 </template>
 
@@ -91,6 +80,10 @@ Polymer({
 			type: String
 		},
 		
+		userPk: {
+			type: String
+		},
+		
 		bool: {
 			type: Boolean,
 			value: false
@@ -104,6 +97,16 @@ Polymer({
 		classData: {
 			type: Object,
 			value: function() { return {}; }	
+		},
+		
+		classSelection: {
+			type: Object,
+			value: function() { return {}; }	
+		},
+		
+		requestData: {
+			type: Object,
+			value: function() { return {}; }	
 		}
 
 	},
@@ -112,14 +115,23 @@ Polymer({
 		this.customStyle['--my-color'] = this.elementColor;
 		this.updateStyles();
 		this.pk = document.querySelector('#localStorage').value.universityPK;
+		this.userPk = document.querySelector('#localStorage').value.userPK;
 		this.$.uniClassListAjax.generateRequest();
 	},
 	
-	_getClassList: function() {
+	sendRequest: function() {
+		this.requestData.classIdKey = this.classSelection.firstElementChild.pk;
+		this.requestData.userIdKey = this.userPk;
+		this.$.createRequestAjax.generateRequest();
+		console.log(this.classSelection);
 	},
 	
 	_handleUniClassListResponse: function() {
 		this.bool = true;
+	},
+	
+	_createRequestResponse: function() {
+		//
 	}
 });
 </script>
