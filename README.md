@@ -4,8 +4,8 @@ Attend.io is an attendance recording application so that professors can save cla
 
 #Screenshots
 
-#####Login/egister
-![login](/screenshots/login.png)
+#####Login/register
+<img src="/screenshots/login.png" width="400">
 
 #####Admin view
 ![admin](/screenshots/admin.png)
