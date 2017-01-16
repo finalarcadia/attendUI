@@ -1,6 +1,6 @@
 #Attend.io Frontend
 
-Attend.io is an attendance recording application so that professors can save class time. The goal is to provide different methods of recording attendance: location, code, & time based.
+Attend.io is an attendance recording application that professors can use save class time. The goal is to provide different methods of recording attendance: location, code, & time based.
 
 #Screenshots
 
@@ -8,17 +8,16 @@ Attend.io is an attendance recording application so that professors can save cla
 <img src="/screenshots/login.png" width="400">
 
 #####Admin view
-![admin](/screenshots/admin.png)
+<img src="/screenshots/admin.png" width="400">
 
 #####Professor view
-![professor](/screenshots/professor.png)
+<img src="/screenshots/professor.png" width="400">
 
 #####Attendance Editing
-![attendance](/screenshots/attendance.png)
+<img src="/screenshots/attendance.png" width="400">
 
 #####Student Dashboard
-![dashboard](/screenshots/dashboard.png)
-
+<img src="/screenshots/dashboard.png" width="400">
 
 #Installation & Usage
 
